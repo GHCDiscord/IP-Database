@@ -34,10 +34,18 @@ After logging into your database, follow these steps:
  ) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1
 ```
 3. Enter your credentials into the 'dbconfig.php' file:
-```
+
   Just replace each variable with "INSERT HERE" with your database-logins.
+  ```
   $DB_host = The address to your database;
   $DB_user = The username to login to your database;
   $DB_pass = The password for the database;
   $DB_name = The name of the database;
+  ```
+  Example:
+    ```
+  $DB_host = "database.my-server.de";
+  $DB_user = "user0392";
+  $DB_pass = "bad@p4ssw0rd";
+  $DB_name = "ghcdatabase";
   ```
