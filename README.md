@@ -43,7 +43,7 @@ After logging into your database, follow these steps:
   $DB_name = The name of the database;
   ```
   Example:
-    ```
+  ```
   $DB_host = "database.my-server.de";
   $DB_user = "user0392";
   $DB_pass = "bad@p4ssw0rd";
