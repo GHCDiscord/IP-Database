@@ -113,7 +113,7 @@ class USER
 
     public function emailAvailable($email){
         if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $stmt = $this->db->prepare("SELECT EMail FROM `Users` WHERE Email = :mail");
+            $stmt = $this->db->prepare("SELECT EMail FROM `Users` WHERE Email = :email");
             $stmt->execute(array(":email"=>$email));
             if($stmt->rowCount() > 0){
                 return false;

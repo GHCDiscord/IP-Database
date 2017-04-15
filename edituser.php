@@ -27,8 +27,7 @@ if(isset($_POST["edituser"])){
     $user->setRole($editid, $role);
     $user->setName($editid, $name);
     $user->setEmail($editid, $email);
-    $user->redirect("admin.php");
-
+    $success = true;
 }
 
 
@@ -40,6 +39,14 @@ include "templates/menu.php";
 ?>
 
 <div class="container">
+    <?php
+    if(isset($success)){
+
+        echo '<div class="alert alert-success" role="alert">
+            <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
+        </div>';
+    }
+    ?>
     <form class="form-horizontal" action="edituser.php<?php echo "?id={$editid}" ?>" method="post">
         <div class="form-group">
             <label for="inputName" class="col-sm-2 control-label">Name</label>

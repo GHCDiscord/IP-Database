@@ -31,7 +31,7 @@ if(isset($_POST["edituser"])){
     $ip->setMiners($miners, $editid);
     $ip->setDescription($description, $editid);
     $ip->setLastUpdated(date("Y-m-d"), $editid);
-    $user->redirect("ipdatabase.php");
+    $success = true;
 
 }
 
@@ -39,6 +39,14 @@ include "templates/header.php";
 include "templates/menu.php";
 ?>
 <div class="container">
+    <?php
+    if(isset($success)){
+
+        echo '<div class="alert alert-success" role="alert">
+            <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
+        </div>';
+    }
+    ?>
     <form class="form-horizontal" action="editip.php<?php echo "?id={$editid}" ?>" method="post">
         
         <div class="form-group">
