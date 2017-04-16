@@ -16,7 +16,7 @@ if(isset($_GET["addIP"])){
     $reputation = $_POST["reputation"];
     $description = $_POST["description"];
     $miners = $_POST["miners"];
-
+    $clan = $_POST["clan"];
     if(strlen($ipstring) == 0){
         $error = true;
         message_error("IPMessage", "IPDiv", "<p>Bitte eine IP angeben!</p>");
@@ -35,7 +35,7 @@ if(isset($_GET["addIP"])){
     }
 
     if(!$error){
-        $success = $ip->add($ipstring, $name, $reputation, $description, $miners, $_SESSION["User"]);
+        $success = $ip->add($ipstring, $name, $reputation, $description, $miners, $_SESSION["User"], $clan);
         if($success) {
         } else {
         echo 'Beim Abspeichern ist leider ein Fehler aufgetreten<br>';
@@ -67,6 +67,12 @@ $string = $ip->returnTable();
     if(!$loggedin){
         echo $user->returnNotLoggedIn();
     } else {
+        if(isset($_GET["editsuccess"])){
+
+        echo '<div class="alert alert-success" role="alert">
+                    <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
+                </div>';
+        }
     ?>
         <div class="col-xs-6">
             <input type="search" id="myInput" onkeyup="searchTable()" class="form-control" placeholder="Search">     
@@ -106,6 +112,11 @@ $string = $ip->returnTable();
                                     <input type="number" name="miners" class="form-control" id="inputMiners" placeholder="42">
                                     <span id="minersMessage" class="help-block"></span>
                                 </div>
+                                <div class="form-group" id="clanDiv">
+                                    <label for="inputClan">Miners</label>
+                                    <input type="text" name="clan" class="form-control" id="inputClan" placeholder="[ABC]">
+                                    <span id="clanMessage" class="help-block"></span>
+                                </div>
                                 <div class="form-group" id="descriptionDiv">
                                     <label for="inputDescription">Description</label>
                                     <textarea type="text" name="description" class="form-control" rows="5" id="inputDescription" placeholder="i = inaktiv"></textarea>
@@ -132,6 +143,7 @@ $string = $ip->returnTable();
                         <th>Last Updated</th>
                         <th>Description</th>
                         <th>Miners</th>
+                        <th>Clan</th>
                         <th>Added By</th>
                         <?php
                         if($user->hasRole($_SESSION["User"], "Moderator") || $user->hasRole($_SESSION["User"], "Admin")){
@@ -217,7 +229,13 @@ $string = $ip->returnTable();
         console.log("Fehler oderso :" + e);
     });
 </script>
-<script src="js/sorttable.js"></script>
+<script>
+    $(document).ready(function() 
+        { 
+            $("#myTable").tablesorter(); 
+        } 
+    );     
+</script>
 <script>
 
 function searchTable(){

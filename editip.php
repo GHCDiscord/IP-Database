@@ -25,13 +25,16 @@ if(isset($_POST["edituser"])){
     $rep = $_POST["reputation"];
     $miners = $_POST["miners"];
     $description= $_POST["description"];
+    $clan = $_POST["clan"];
     $ip->setIP($editip, $editid);
     $ip->setAttackedName($name, $editid);
     $ip->setReputation($rep, $editid);
     $ip->setMiners($miners, $editid);
     $ip->setDescription($description, $editid);
+    $ip->setClan($clan, $editid);
     $ip->setLastUpdated(date("Y-m-d"), $editid);
     $success = true;
+    $user->redirect("ipdatabase.php?editsuccess=1");
 
 }
 
@@ -74,9 +77,15 @@ include "templates/menu.php";
             </div>
         </div>
         <div class="form-group">
+            <label for="inputClan" class="col-sm-2 control-label">Clan</label>
+            <div class="col-sm-10">
+                <input type="text" name="clan" class="form-control" id="inputClan" value="<?php echo $ip->getData("Clan", $editid); ?>" placeholder="[ABC]">
+            </div>
+        </div>
+        <div class="form-group">
             <label for="inputDesc" class="col-sm-2 control-label">Description</label>
             <div class="col-sm-10">
-                <textarea type="text" class="form-control" rows="5" name="description" id="inputDesc" value="<?php echo $ip->getData("Description", $editid); ?>" placeholder="i = inaktiv"></textarea>
+                <textarea type="text" class="form-control" rows="5" name="description" id="inputDesc" value="" placeholder="i = inaktiv"><?php echo $ip->getData("Description", $editid); ?></textarea>
             </div>
         </div>
         <div class="form-group">

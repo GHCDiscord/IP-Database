@@ -23,8 +23,11 @@ $string = $user->returnTable();
 <div class="container">
     <div class="col-md-12">
         <?php
-        if(isset($error)){
-            
+        if(isset($_GET["editsuccess"])){
+
+        echo '<div class="alert alert-success" role="alert">
+                    <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
+                </div>';
         }
         ?>
     </div>
@@ -39,7 +42,9 @@ $string = $user->returnTable();
                     <th>Name</th>
                     <th>E-Mail</th>
                     <th>Rolle</th>
-                    <th>Last Login</th>
+                    <th>Last Login (Y-M-D H:M:S)</th>
+                    <th>Discord</th>
+                    <th>Gültigkeit</th>
                     <th>Edit</th>
                 <tr>
             <thead>
@@ -65,8 +70,13 @@ $string = $user->returnTable();
         console.log("Fehler oderso :" + e);
     });
 </script>
-
-<script src="js/sorttable.js"></script>
+<script>
+    $(document).ready(function() 
+        { 
+            $("#myTable").tablesorter(); 
+        } 
+    );     
+</script>
 <script>
 function searchTable(){
 

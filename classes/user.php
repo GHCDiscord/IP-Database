@@ -123,6 +123,29 @@ class USER
         return false;
     }
 
+    public function findUserWithName($name){
+      $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE Username = :name");
+      $stmt->execute(array(":name"=>$name));
+      $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+      return $userRow["ID"];
+    }
+
+    // TRUE IF EXPIRED ; FALSE IF VALID
+    public function isExpired($id){
+        $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID = :id ORDER BY `ID` ASC");
+        $stmt->execute(array(":id"=>$id));
+        $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $expireDate =$userRow["ExpireDate"];
+        $expireDate = strtotime(str_replace("-","/", $expireDate));
+        $today = strtotime(date("Y/m/d"));
+        if($today > $expireDate){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function hasRole($id, $role){
         $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID = :id ORDER BY `ID` ASC");
         $stmt->execute(array(":id"=>$id));
@@ -153,6 +176,12 @@ class USER
 
         return $success;
     }
+    public function setDiscord($id, $discord){
+        $stmt = $this->db->prepare("UPDATE `Users` SET `DiscordName`=:discord WHERE `ID`=:id");
+        $success = $stmt->execute(array(":id"=>$id, ":discord"=>$discord));
+
+        return $success;
+    }
 
 
     public function returnTable(){
@@ -162,12 +191,25 @@ class USER
 
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+          $expireDate =$row["ExpireDate"];
+          $expireDate = strtotime(str_replace("-","/", $expireDate));
+
+
+          $today = strtotime(date("Y/m/d"));
+          if($today > $expireDate){
+            $expired = "Abgelaufen";
+          } else {
+            $expired = "Gültig";
+          }
             $rowString = "<tr>
                 <td> {$row['ID']} </td>
                 <td> {$row['Username']} </td>
                 <td>" . $row['Email'] . "</td>
                 <td>" . $row['Role'] . "</td>
                 <td>" . $row['Last_Login'] . "</td>
+                <td>" . $row['DiscordName'] . "</td>
+                <td>" . $expired . "</td>
                 <td> <a href='edituser.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-warning btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>
                 </tr>";
             $returnString .= $rowString;

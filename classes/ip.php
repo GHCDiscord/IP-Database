@@ -7,9 +7,9 @@ class IP {
       $this->db = $DB_con;
     }
 
-    public function add($ipstring, $name, $rep=0, $description="", $miners=0, $addedbyid){
+    public function add($ipstring, $name, $rep=0, $description="", $miners=0, $addedbyid, $clan){
         try{
-            $stmt = $this->db->prepare('INSERT INTO `HackersIP`(`IP`, `Name`, `Reputation`, `Last_Updated`, `Miners`, `Description`, `Added_By`) VALUES (:ip, :name, :rep, :lastup, :miners, :description, :addedby)');
+            $stmt = $this->db->prepare('INSERT INTO `HackersIP`(`IP`, `Name`, `Reputation`, `Last_Updated`, `Miners`, `Description`, `Added_By`, `Clan`) VALUES (:ip, :name, :rep, :lastup, :miners, :description, :addedby, :clan)');
             $stmt->bindParam(':ip', $ipstring);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':rep', $rep);
@@ -17,6 +17,7 @@ class IP {
             $stmt->bindParam(':miners', $miners);
             $stmt->bindParam(':description', $description);
             $stmt->bindParam(':addedby', $addedbyid);
+            $stmt->bindParam(':clan', $clan);
             
             $stmt->execute(); 
 
@@ -48,6 +49,13 @@ class IP {
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $user = new USER($this->db);
+
+            $userID = $user->findUserWithName($row["Name"]);
+
+            if(!($user->isExpired($userID))){
+                continue;
+            }
+
             $rowString = "<tr>
                           <td>  <button class='btn btn-link btn-xs' data-clipboard-text='{$row['IP']}'>" . $row['IP'] . "</button></td>" . 
                          "<td>" . $row['Name'] . "</td>" . 
@@ -55,6 +63,7 @@ class IP {
                          "<td>" . $row['Last_Updated'] . "</td>" . 
                          "<td>" . $row['Description'] . "</td>" . 
                          "<td>" . $row['Miners'] . "</td>" .
+                         "<td>" . $row['Clan'] . "</td>" .
                          "<td>" . $user->getName($row['Added_By']) . "</td>";
                          if($user->hasRole($_SESSION["User"], "Admin") || $user->hasRole($_SESSION["User"], "Moderator")){
                              $rowString .= "<td><a href='editip.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-warning btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>";
@@ -65,12 +74,16 @@ class IP {
         return $returnString;
     }
 
+
+    // DEPRECATED
     public function returnFilteredTable($search){
         $search = "%" . $search;
         $search = $search . "%";
         $stmt = $this->db->prepare('SELECT * FROM `HackersIP` WHERE `Name` LIKE :search OR `IP` LIKE :search');
         $stmt->execute(array(":search"=>$search));
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+
+
             $user = new USER($this->db);
             $rowString = "<tr>
                           <td>  <button class='btn btn-link btn-xs' data-clipboard-text='{$row['IP']}'>" . $row['IP'] . "</button></td>" . 
@@ -132,6 +145,11 @@ class IP {
     public function setMiners($miners, $id){
         $stmt = $this->db->prepare("UPDATE `HackersIP` SET `Miners`=:miners WHERE `ID`=:id");
         $stmt->execute(array(":miners"=>$miners, ":id"=>$id));    
+    }
+
+    public function setClan($clan, $id){
+        $stmt = $this->db->prepare("UPDATE `HackersIP` SET `Clan`=:clan WHERE `ID`=:id");
+        $stmt->execute(array(":clan"=>$clan, ":id"=>$id));       
     }
 
 

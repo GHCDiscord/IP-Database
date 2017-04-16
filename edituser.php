@@ -16,6 +16,7 @@ if(!isset($_GET["id"])){
 
 if(isset($_POST["deleteuser"])){
     $user->delete($editid);
+
     $user->redirect("admin.php");
 }
 
@@ -23,11 +24,13 @@ if(isset($_POST["edituser"])){
     $name = $_POST["name"];
     $email = $_POST["email"];
     $role = $_POST["role"];
+    $discord = $_POST["discord"];
     echo "<script>console.log('$role')</script>";
     $user->setRole($editid, $role);
     $user->setName($editid, $name);
     $user->setEmail($editid, $email);
-    $success = true;
+    $user->setDiscord($editid, $discord);
+    $user->redirect("admin.php?editsuccess=1");
 }
 
 
@@ -52,6 +55,12 @@ include "templates/menu.php";
             <label for="inputName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
                 <input type="text" name="name" class="form-control" id="inputName" <?php echo 'value="' . $user->getData("Username", $editid) . '"'; ?> placeholder="Name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputDiscord" class="col-sm-2 control-label">Discord</label>
+            <div class="col-sm-10">
+                <input type="text" name="discord" class="form-control" id="inputDiscord" <?php echo 'value="' . $user->getData("DiscordName", $editid) . '"'; ?> placeholder="Discord#1234">
             </div>
         </div>
         <div class="form-group">
