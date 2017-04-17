@@ -1,9 +1,11 @@
+
+
 # IP-Database
 PervSealy Site
 
 This is the website for the GHC-Community on Discord (https://discord.gg/3bQ5hE5)
 
-# Setup
+# Setup (OUTDATED: TABLES HAVE BEEN EDITED AND NEW ONES HAVE BEEN ADDED)
 The website requires an MYSQL-Database to work. Since there is no setup-file, you have to do it yourself.
 After logging into your database, follow these steps:
 1. Create the IP-Database with the following SQL-Code:
