@@ -9,10 +9,15 @@ if(isset($_GET["login"])){
     $uname = $_POST['name'];
     $password = $_POST['password'];
 
-    if($user->login($uname, $password)){
-        $user->redirect('index.php');
+    $userid = $user->findUserWithName($uname);
+    if($user->isExpired($userid)){
+        $accountexpired = true;
     } else {
-        $error = true;
+        if($user->login($uname, $password)){
+            $user->redirect('index.php');
+        } else {
+            $error = true;
+        }
     }
 }
 
@@ -34,6 +39,22 @@ include 'templates/menu.php';
         <span aria-hidden='true'>×</span></button> 
         <h4>3RR0R!</h4> 
         <p>Nutzername und/oder Passwort inkorrekt!</p> 
+    </div>
+
+    <?php
+    }
+    ?>
+
+    <?php
+    // If the login has an error:
+    if(isset($accountexpired)){
+    ?>
+
+    <div class='alert alert-danger alert-dismissible fade in' role='alert'> 
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>×</span></button> 
+        <h4>3RR0R!</h4> 
+        <p>Dieser Account ist abgelaufen! Du kannst ihn aber auf unserem Discord wieder reaktivieren! Keine Angst, deine Accountdaten sind noch da!</p> 
     </div>
 
     <?php

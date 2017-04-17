@@ -8,17 +8,18 @@ class USER
     }
 
     //Registers a new user
-    public function register($username, $email,$password){
+    public function register($username, $email,$password, $expdate){
        try
        {
            $new_password = password_hash($password, PASSWORD_DEFAULT);
    
-           $stmt = $this->db->prepare("INSERT INTO `Users`(Username,Email,Password) 
-                                                       VALUES(:uname, :umail, :upass)");
+           $stmt = $this->db->prepare("INSERT INTO `Users`(Username,Email,Password, ExpireDate) 
+                                                       VALUES(:uname, :umail, :upass, :expdate)");
               
            $stmt->bindparam(":uname", $username);
            $stmt->bindparam(":umail", $email);
-           $stmt->bindparam(":upass", $new_password);            
+           $stmt->bindparam(":upass", $new_password);  
+           $stmt->bindparam(":expdate", $expdate);              
            $stmt->execute(); 
    
            return $stmt; 
@@ -132,6 +133,12 @@ class USER
 
     // TRUE IF EXPIRED ; FALSE IF VALID
     public function isExpired($id){
+        if($this->hasRole($id, "Admin")){
+          return false;
+        }
+        if($this->hasRole($id, "Moderator")){
+          return false;
+        }
         $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID = :id ORDER BY `ID` ASC");
         $stmt->execute(array(":id"=>$id));
         $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -146,8 +153,22 @@ class USER
         }
     }
 
+    public function setExpireDate($id, $date){
+        $stmt = $this->db->prepare("UPDATE `Users` SET `ExpireDate`=:expdate WHERE `ID`=:id");
+        $success = $stmt->execute(array(":id"=>$id, ":expdate"=>$date));
+
+        return $success;     
+    }
+
+    public function refreshAccount($id){
+        $expdate = date('Y-m-d', strtotime("+30 days"));
+        $stmt = $this->db->prepare("UPDATE `Users` SET `ExpireDate`=:expdate WHERE `ID`=:id");
+        $success = $stmt->execute(array(":id"=>$id, ":expdate"=>$expdate));
+
+        return $success;
+    }
     public function hasRole($id, $role){
-        $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID = :id ORDER BY `ID` ASC");
+        $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID =:id ORDER BY `ID` ASC");
         $stmt->execute(array(":id"=>$id));
         $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
         if($userRow['Role'] == $role){
@@ -191,17 +212,18 @@ class USER
 
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            if ($this->isExpired($row["ID"])){
+              $expired = "Abgelaufen";
+            } else {
+              $expired = "Gültig";
+            }
+            if($this->hasRole($row["ID"], "Admin")){
+              $expired = "Admin";
+            }
+            if($this->hasRole($row["ID"], "Moderator")){
+              $expired = "Moderator";
+            }
 
-          $expireDate =$row["ExpireDate"];
-          $expireDate = strtotime(str_replace("-","/", $expireDate));
-
-
-          $today = strtotime(date("Y/m/d"));
-          if($today > $expireDate){
-            $expired = "Abgelaufen";
-          } else {
-            $expired = "Gültig";
-          }
             $rowString = "<tr>
                 <td> {$row['ID']} </td>
                 <td> {$row['Username']} </td>
@@ -231,6 +253,17 @@ class USER
         return $row[$column];
     }
 
+    public function hasReported($userid, $ipid){
+        $stmt = $this->db->prepare("SELECT * FROM `IPUserReport` WHERE `UserID`=:userid AND `IPID`=:ipid");
+        $stmt->execute(array(":userid"=>$userid, ":ipid"=>$ipid));
+
+        if($stmt->rowCount() > 0){
+          return true;
+        } else {
+          return false;
+        }
+        return true;
+    }
 
 
 }

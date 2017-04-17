@@ -49,14 +49,24 @@ class IP {
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             $user = new USER($this->db);
-
             $userID = $user->findUserWithName($row["Name"]);
 
             if(!($user->isExpired($userID))){
                 continue;
             }
 
-            $rowString = "<tr>
+            if($user->hasReported($_SESSION["User"], $row["ID"])){
+                $disabled = "disabled";
+            } else {
+                $disabled = "";
+            }
+
+            if($this->reportCount($row["ID"]) >= 5){
+                $danger = "danger";
+            } else {
+                $danger = "";
+            }
+            $rowString = "<tr id='row{$row["ID"]}' class='{$danger}'>
                           <td>  <button class='btn btn-link btn-xs' data-clipboard-text='{$row['IP']}'>" . $row['IP'] . "</button></td>" . 
                          "<td>" . $row['Name'] . "</td>" . 
                          "<td>" . $row['Reputation'] . "</td>" . 
@@ -64,37 +74,10 @@ class IP {
                          "<td>" . $row['Description'] . "</td>" . 
                          "<td>" . $row['Miners'] . "</td>" .
                          "<td>" . $row['Clan'] . "</td>" .
-                         "<td>" . $user->getName($row['Added_By']) . "</td>";
+                         "<td>" . $user->getName($row['Added_By']) . "</td>" . 
+                         "<td><a id='report{$row['ID']}' onclick='report({$row['ID']})' data-placement='top' data-toggle='tooltip' title='Report' class='btn btn-warning btn-xs {$disabled}'><span class='glyphicon glyphicon-alert disabled'></span></a>" . "</td>";
                          if($user->hasRole($_SESSION["User"], "Admin") || $user->hasRole($_SESSION["User"], "Moderator")){
-                             $rowString .= "<td><a href='editip.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-warning btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>";
-                         }
-                         $rowString .= "</tr>";
-            $returnString .= $rowString;
-        }
-        return $returnString;
-    }
-
-
-    // DEPRECATED
-    public function returnFilteredTable($search){
-        $search = "%" . $search;
-        $search = $search . "%";
-        $stmt = $this->db->prepare('SELECT * FROM `HackersIP` WHERE `Name` LIKE :search OR `IP` LIKE :search');
-        $stmt->execute(array(":search"=>$search));
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-
-
-            $user = new USER($this->db);
-            $rowString = "<tr>
-                          <td>  <button class='btn btn-link btn-xs' data-clipboard-text='{$row['IP']}'>" . $row['IP'] . "</button></td>" . 
-                         "<td>" . $row['Name'] . "</td>" . 
-                         "<td>" . $row['Reputation'] . "</td>" . 
-                         "<td>" . $row['Last_Updated'] . "</td>" . 
-                         "<td>" . $row['Description'] . "</td>" . 
-                         "<td>" . $row['Miners'] . "</td>" .
-                         "<td>" . $user->getName($row['Added_By']) . "</td>";
-                         if($user->hasRole($_SESSION["User"], "Admin") || $user->hasRole($_SESSION["User"], "Moderator")){
-                             $rowString .= "<a href='editip.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-warning btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>";
+                             $rowString .= "<td><a href='editip.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-success btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>";
                          }
                          $rowString .= "</tr>";
             $returnString .= $rowString;
@@ -161,5 +144,32 @@ class IP {
         return $row[$column];
     }
 
+    // Reports an IP
+    public function report($ipid, $userid){
+            $stmt = $this->db->prepare('INSERT INTO `IPUserReport`(`UserID`,`IPID`) VALUES (:user, :ip)');
+            $stmt->bindParam(':user', $userid);
+            $stmt->bindParam(':ip', $ipid);
 
+            $success = $stmt->execute();
+            return $success;
+    }
+
+    public function reportCount($id){
+        $stmt = $this->db->prepare("SELECT * FROM `IPUserReport` WHERE `IPID`=:id");
+        $stmt->execute(array(':id'=>$id));
+
+        return $stmt->rowCount();
+    }
+
+    public function listReportNames($id){
+        $stmt = $this->db->prepare("SELECT * FROM `IPUserReport` WHERE `IPID`=:id");
+        $stmt->execute(array(':id'=>$id));      
+        $user = new USER($this->db);
+        $outputstring = "<ul>";
+        while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $outputstring .= "<li>" . $user->getData("Username", $row["UserID"]) . "</li>";
+        }
+        $outputstring .= "</ul>";
+        return $outputstring;
+    }
 }

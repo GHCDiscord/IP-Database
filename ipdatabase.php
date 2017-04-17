@@ -145,6 +145,7 @@ $string = $ip->returnTable();
                         <th>Miners</th>
                         <th>Clan</th>
                         <th>Added By</th>
+                        <th>Report</th>
                         <?php
                         if($user->hasRole($_SESSION["User"], "Moderator") || $user->hasRole($_SESSION["User"], "Admin")){
                             echo "<th>Edit</th>";
@@ -197,11 +198,7 @@ $string = $ip->returnTable();
 </script>
 
 <script type="text/javascript">
-    function filterTable(str){
-        if(str == ""){
-            document.getElementById("tbody").innerHTML = "";
-            return;
-        } else {
+    function report(id){
             if(window.XMLHttpRequest){
                 xmlhttp = new XMLHttpRequest();
             }else {
@@ -209,16 +206,14 @@ $string = $ip->returnTable();
             }
             xmlhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200){
-                document.getElementById("tbody").innerHTML = this.responseText;
+                document.getElementById("report" + id).className += " disabled"
             }
         }; // OnReadyStateChange
-        xmlhttp.open("GET","api/filteriptable.php?search="+str,true);
+        xmlhttp.open("GET","api/reportip.php?id="+id,true);
         xmlhttp.send();
         }
-    }
 </script>
     <script src="js/clipboard.min.js" type="text/javascript"></script>
-
 
 <script>
     var clipboard = new Clipboard('.btn');

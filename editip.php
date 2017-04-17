@@ -50,6 +50,7 @@ include "templates/menu.php";
         </div>';
     }
     ?>
+    <p>Diese IP wurde <?php echo $ip->reportCount($editid); ?> mal gemeldet!</p>
     <form class="form-horizontal" action="editip.php<?php echo "?id={$editid}" ?>" method="post">
         
         <div class="form-group">
@@ -95,4 +96,6 @@ include "templates/menu.php";
             </div>
         </div>
     </form>
+    <h3>Diese IP wurde gemeldet von:</h3>
+    <?php echo $ip->listReportNames($editid);?>
 </div>

@@ -20,6 +20,10 @@ if(isset($_POST["deleteuser"])){
     $user->redirect("admin.php");
 }
 
+if(isset($_POST["refreshuser"])){
+    $user->refreshAccount($editid);
+}
+
 if(isset($_POST["edituser"])){
     $name = $_POST["name"];
     $email = $_POST["email"];
@@ -73,9 +77,9 @@ include "templates/menu.php";
             <label for="inputRolle" class="col-sm-2 control-label">Rolle</label>
             <div class="col-sm-10">
                 <select name="role" class="form-control" id="inputRolle">
-                    <option value="Admin">Admin</option>
-                    <option value="Moderator">Moderator</option>
-                    <option value="User">User</option>
+                    <option value="Admin" <?php if($user->hasRole($editid, "Admin")){ echo 'selected="selected"';} ?> >Admin</option>
+                    <option value="Moderator" <?php if($user->hasRole($editid, "Moderator")){ echo 'selected="selected"';} ?> >Moderator</option>
+                    <option value="User" <?php if($user->hasRole($editid, "User")){ echo 'selected="selected"';} ?> >User</option>
                 </select>
             </div>
         </div>
@@ -83,6 +87,7 @@ include "templates/menu.php";
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" name="edituser" class="btn btn-success">Update</button>
+                <button type="submit" name="refreshuser" class="btn btn-info">Reaktivieren</button>
                 <button type="submit" name="deleteuser" value="Delete" class="btn btn-danger">Delete</button>
             </div>
         </div>

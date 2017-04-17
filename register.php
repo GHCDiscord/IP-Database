@@ -53,7 +53,8 @@ if(isset($_GET['register'])){
     }
 
     if(!$error){
-        $success = $user->register($username, $email, $password);
+        $expdate = date('Y-m-d', strtotime("+30 days"));
+        $success = $user->register($username, $email, $password, $expdate);
 
         if($success){
             $user->redirect("index.php");
