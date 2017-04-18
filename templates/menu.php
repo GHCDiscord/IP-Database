@@ -23,14 +23,20 @@
         if($user->is_loggedin()){
           $userid = $_SESSION["User"];
           if($user->hasRole($userid, "Admin")){
-            echo "<li><a href='admin.php'>Admin</a></li>";
+            echo "<li><a href='admin.php'><span class='glyphicon glyphicon-edit'></span> Admin</a></li>";
           }
-          echo "<li><a href='#'>" . $user->getName($userid) . "</a></li>";
-          echo "<li><a href='logout.php'>Logout</a></li>";
 
+          echo "<li class='dropdown'>
+          <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>" . $user->getName($userid) . "<span class='caret'></span></a>
+          <ul class='dropdown-menu'>
+            <li><a href='usersettings.php'>Settings</a></li>
+            <li role='separator' class='divider'></li>
+            <li><a href='logout.php'><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>
+          </ul>
+          </li>";
         } else {
           echo "<li><a href='login.php'>Login</a></li>";
-          echo "<li><a href='register.php'>Register</a></li>";
+          //echo "<li><a href='register.php'>Register</a></li>";
         }
 
         ?>

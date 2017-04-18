@@ -19,9 +19,9 @@ class IP {
             $stmt->bindParam(':addedby', $addedbyid);
             $stmt->bindParam(':clan', $clan);
             
-            $stmt->execute(); 
+            $success = $stmt->execute(); 
 
-            return $stmt;
+            return $success;
         } catch (PDOException $e){
             echo $e.getMessage();
         }
@@ -56,17 +56,32 @@ class IP {
             }
 
             if($user->hasReported($_SESSION["User"], $row["ID"])){
-                $disabled = "disabled";
+                $onclick = "unreport";
+                $symbol = "glyphicon glyphicon-ok";
+                $color = "btn-success";
+                $title = "Unreport";
             } else {
-                $disabled = "";
+                $onclick = "report";
+                $symbol = "glyphicon glyphicon-alert";
+                $color = "btn-warning";
+                $title = "Report";
+            }
+            $class = "";
+            // Reputation größer als 75% der eigenen
+            if($row["Reputation"] > ($user->getData("Reputation", $_SESSION["User"]) * 0.75) && !$user->reputationIsNull($_SESSION["User"]) ){
+                $class = "info";
+            }
+
+            // Reputation kleiner als 25% der Eigenen
+            if($row["Reputation"] < ($user->getData("Reputation", $_SESSION["User"]) * 0.25) && !$user->reputationIsNull($_SESSION["User"]) ){
+                $class = "warning";
             }
 
             if($this->reportCount($row["ID"]) >= 5){
-                $danger = "danger";
-            } else {
-                $danger = "";
+                $class = "danger";
             }
-            $rowString = "<tr id='row{$row["ID"]}' class='{$danger}'>
+
+            $rowString = "<tr id='row{$row["ID"]}' class='{$class}'>
                           <td>  <button class='btn btn-link btn-xs' data-clipboard-text='{$row['IP']}'>" . $row['IP'] . "</button></td>" . 
                          "<td>" . $row['Name'] . "</td>" . 
                          "<td>" . $row['Reputation'] . "</td>" . 
@@ -75,7 +90,7 @@ class IP {
                          "<td>" . $row['Miners'] . "</td>" .
                          "<td>" . $row['Clan'] . "</td>" .
                          "<td>" . $user->getName($row['Added_By']) . "</td>" . 
-                         "<td><a id='report{$row['ID']}' onclick='report({$row['ID']})' data-placement='top' data-toggle='tooltip' title='Report' class='btn btn-warning btn-xs {$disabled}'><span class='glyphicon glyphicon-alert disabled'></span></a>" . "</td>";
+                         "<td><a id='report{$row['ID']}' onclick='{$onclick}({$row['ID']})' data-placement='top' data-toggle='tooltip' title='{$title}' class='btn {$color} btn-xs'><span class='{$symbol}'></span></a>" . "</td>";
                          if($user->hasRole($_SESSION["User"], "Admin") || $user->hasRole($_SESSION["User"], "Moderator")){
                              $rowString .= "<td><a href='editip.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-success btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>";
                          }
@@ -135,6 +150,10 @@ class IP {
         $stmt->execute(array(":clan"=>$clan, ":id"=>$id));       
     }
 
+    public function clearReports($id){
+        $stmt = $this->db->prepare('DELETE FROM `IPUserReport` WHERE `IPID`=:id');
+        $stmt->execute(array(":id"=>$id));
+    }
 
     public function getData($column, $id){
         $stmt = $this->db->prepare("SELECT * FROM `HackersIP` WHERE `ID`=:id");
@@ -149,6 +168,16 @@ class IP {
             $stmt = $this->db->prepare('INSERT INTO `IPUserReport`(`UserID`,`IPID`) VALUES (:user, :ip)');
             $stmt->bindParam(':user', $userid);
             $stmt->bindParam(':ip', $ipid);
+
+            $success = $stmt->execute();
+            return $success;
+    }
+
+    // Reports an IP
+    public function unreport($ipid, $userid){
+            $stmt = $this->db->prepare('DELETE FROM `IPUserReport` WHERE `IPID`=:ipid AND `UserID`=:user');
+            $stmt->bindParam(':user', $userid);
+            $stmt->bindParam(':ipid', $ipid);
 
             $success = $stmt->execute();
             return $success;

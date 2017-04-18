@@ -8,7 +8,7 @@ class USER
     }
 
     //Registers a new user
-    public function register($username, $email,$password, $expdate){
+    public function register($username, $email="",$password, $expdate){
        try
        {
            $new_password = password_hash($password, PASSWORD_DEFAULT);
@@ -19,7 +19,7 @@ class USER
            $stmt->bindparam(":uname", $username);
            $stmt->bindparam(":umail", $email);
            $stmt->bindparam(":upass", $new_password);  
-           $stmt->bindparam(":expdate", $expdate);              
+           $stmt->bindparam(":expdate", $expdate);
            $stmt->execute(); 
    
            return $stmt; 
@@ -58,6 +58,19 @@ class USER
        }
     }
 
+    public function loginDataCorrect($username, $password){
+          $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE Username=:uname OR Email=:umail LIMIT 1");
+          $stmt->execute(array(':uname'=>$username, ':umail'=>$username));     
+          if($stmt->rowCount() > 0){
+              $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
+              if(password_verify($password, $userRow['Password'])){
+                  return true;
+              }
+          }
+          return false;
+    }
+
+
     //Checks if User is loggedIn
     public function is_loggedin(){
       if(isset($_SESSION['User']))
@@ -81,6 +94,16 @@ class USER
        } else {
            return false;
        }
+    }
+
+    public function verifyToken($token){
+        $stmt = $this->db->prepare("SELECT * FROM `APIToken` WHERE Token=:token LIMIT 1");
+        $stmt->execute(array(':token'=>$token));
+        if($stmt->rowCount() > 0){
+          return true;
+        } else {
+          return false;
+        }
     }
 
     //Redirect User to URL
@@ -131,6 +154,16 @@ class USER
       return $userRow["ID"];
     }
 
+    public function findUserWithDiscord($name){
+      $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE DiscordName = :name");
+      $stmt->execute(array(":name"=>$name));
+      if($stmt->rowCount() > 0){
+          $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+          return $userRow["ID"];
+      } else {
+        return false;
+      }
+    }
     // TRUE IF EXPIRED ; FALSE IF VALID
     public function isExpired($id){
         if($this->hasRole($id, "Admin")){
@@ -160,12 +193,49 @@ class USER
         return $success;     
     }
 
+    public function generateToken($id){
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ*-_*.()';
+        $string = '';
+
+        for ($i = 0; $i < 50; $i++) {
+            $string .= $characters[mt_rand(0, strlen($characters) - 1)];
+        }
+
+        if($this->getToken($id) == false){
+            $stmt = $this->db->prepare("INSERT INTO `APIToken`(UserID,Token) 
+                                                       VALUES(:id, :token)");
+            $stmt->execute(array("id"=>$id,"token"=>$string));         
+        } else {
+            $stmt = $this->db->prepare("UPDATE `APIToken` SET `Token`=:token WHERE `UserID`=:id");
+            $success = $stmt->execute(array(":id"=>$id, ":token"=>$string));
+        }
+
+              
+
+    }
+
+    public function getToken($id){
+        $stmt = $this->db->prepare("SELECT * FROM `APIToken` WHERE `UserID`=:id");
+        $stmt->execute(array(":id"=>$id));
+
+        if($stmt->rowCount() == 0){
+          return false;
+        }
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row["Token"];
+    }
+
     public function refreshAccount($id){
         $expdate = date('Y-m-d', strtotime("+30 days"));
         $stmt = $this->db->prepare("UPDATE `Users` SET `ExpireDate`=:expdate WHERE `ID`=:id");
         $success = $stmt->execute(array(":id"=>$id, ":expdate"=>$expdate));
 
         return $success;
+    }
+
+    public function returnExpireDate(){
+        $expdate = date('Y-m-d', strtotime("+30 days"));
+        return $expdate;
     }
     public function hasRole($id, $role){
         $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID =:id ORDER BY `ID` ASC");
@@ -202,6 +272,24 @@ class USER
         $success = $stmt->execute(array(":id"=>$id, ":discord"=>$discord));
 
         return $success;
+    }
+    public function setReputation($id, $rep){
+        $stmt = $this->db->prepare("UPDATE `Users` SET `Reputation`=:rep WHERE `ID`=:id");
+        $success = $stmt->execute(array(":id"=>$id, ":rep"=>$rep));
+
+        return $success;
+    }
+
+    public function reputationIsNull($id){
+      $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
+      $stmt->execute(array(":id"=>$id));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      if($row["Reputation"] == 0 || $row["Reputation"] == NULL){
+        return true;
+      } else {
+        return false;
+      }
     }
 
 

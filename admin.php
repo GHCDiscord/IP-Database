@@ -121,3 +121,5 @@ function searchTable(){
 
 
 </script>
+<?php
+include 'templates/footer.php';

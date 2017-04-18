@@ -33,6 +33,7 @@ if(isset($_POST["edituser"])){
     $ip->setDescription($description, $editid);
     $ip->setClan($clan, $editid);
     $ip->setLastUpdated(date("Y-m-d"), $editid);
+    $ip->clearReports($editid);
     $success = true;
     $user->redirect("ipdatabase.php?editsuccess=1");
 

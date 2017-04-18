@@ -9,15 +9,23 @@ if(isset($_GET["login"])){
     $uname = $_POST['name'];
     $password = $_POST['password'];
 
-    $userid = $user->findUserWithName($uname);
-    if($user->isExpired($userid)){
-        $accountexpired = true;
-    } else {
-        if($user->login($uname, $password)){
-            $user->redirect('index.php');
+    if($user->loginDataCorrect($uname, $password)){
+
+
+        $userid = $user->findUserWithName($uname);        
+        if($user->isExpired($userid)){
+            $accountexpired = true;
+
+
         } else {
-            $error = true;
+            if($user->login($uname, $password)){
+                $user->redirect("ipdatabase.php");
+            } else {
+                $error = true;
+            }
         }
+    } else {
+        $error = true;
     }
 }
 
@@ -31,7 +39,7 @@ include 'templates/menu.php';
     <div class="col-md-12">
     <?php
     // If the login has an error:
-    if(isset($error)){
+    if($error){
     ?>
 
     <div class='alert alert-danger alert-dismissible fade in' role='alert'> 
@@ -47,14 +55,14 @@ include 'templates/menu.php';
 
     <?php
     // If the login has an error:
-    if(isset($accountexpired)){
+    if($accountexpired == true && $user->loginDataCorrect($uname, $password)){
     ?>
 
     <div class='alert alert-danger alert-dismissible fade in' role='alert'> 
         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
         <span aria-hidden='true'>×</span></button> 
         <h4>3RR0R!</h4> 
-        <p>Dieser Account ist abgelaufen! Du kannst ihn aber auf unserem Discord wieder reaktivieren! Keine Angst, deine Accountdaten sind noch da!</p> 
+        <p>Dieser Account ist abgelaufen! Du kannst ihn aber auf unserem Discord wieder reaktivieren! Keine Angst, deine Accountdaten sind noch da!<br>Sollte jedoch deine IP in unserer Datenbank sein, könnte diese nun vielleicht angezeigt werden!</p> 
     </div>
 
     <?php
@@ -73,6 +81,9 @@ include 'templates/menu.php';
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-        <label><p>Noch keinen Account? <a href="register.php">Hier regestrieren!</a></label>
+        <label><p>Noch keinen Account? Regestriere dich auf unserem Discordserver mit unserem Bot!</label>
     </div> <!-- Col Md 12 -->
 </div> <!-- Container -->
+
+<?php
+include 'templates/footer.php';

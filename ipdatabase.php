@@ -64,15 +64,22 @@ $string = $ip->returnTable();
 <div class="container">
     <div class="col-xs-12">
     <?php
+
     if(!$loggedin){
         echo $user->returnNotLoggedIn();
     } else {
-        if(isset($_GET["editsuccess"])){
+            if(isset($_GET["editsuccess"])){
 
-        echo '<div class="alert alert-success" role="alert">
-                    <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
-                </div>';
-        }
+            echo '<div class="alert alert-success" role="alert">
+                        <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
+                    </div>';
+            }
+                        if($user->reputationIsNull($_SESSION["User"])){
+            echo    '<div class="alert alert-warning alert-dismissible" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <p>Gib deine Reputation in den Einstellungen an, damit wir für dich relevante IPs anzeigen können!</p>
+                    </div>';
+            } 
     ?>
         <div class="col-xs-6">
             <input type="search" id="myInput" onkeyup="searchTable()" class="form-control" placeholder="Search">     
@@ -213,6 +220,24 @@ $string = $ip->returnTable();
         xmlhttp.send();
         }
 </script>
+
+<script type="text/javascript">
+    function unreport(id){
+            if(window.XMLHttpRequest){
+                xmlhttp = new XMLHttpRequest();
+            }else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200){
+                document.getElementById("report" + id).className += " disabled"
+            }
+        }; // OnReadyStateChange
+        xmlhttp.open("GET","api/unreportip.php?id="+id,true);
+        xmlhttp.send();
+        }
+</script>
+
     <script src="js/clipboard.min.js" type="text/javascript"></script>
 
 <script>
