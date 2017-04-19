@@ -120,8 +120,8 @@ $string = $ip->returnTable();
                                     <span id="minersMessage" class="help-block"></span>
                                 </div>
                                 <div class="form-group" id="clanDiv">
-                                    <label for="inputClan">Miners</label>
-                                    <input type="text" name="clan" class="form-control" id="inputClan" placeholder="[ABC]">
+                                    <label for="inputClan">Clan</label>
+                                    <input type="text" name="clan" class="form-control" id="inputClan" placeholder="ABC">
                                     <span id="clanMessage" class="help-block"></span>
                                 </div>
                                 <div class="form-group" id="descriptionDiv">
