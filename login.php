@@ -1,5 +1,4 @@
 <?
-
 require_once 'dbconfig.php';
 
 if($user->is_loggedin()){

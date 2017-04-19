@@ -15,11 +15,13 @@ if(isset($_POST["discorduser"])){
 	$error = "no discord";
 }
 
-if(!$error){
+if($error == false){
 	if($user->findUserWithDiscord($discord)){
-		$user->refreshAccount();
+		$user->refreshAccount($user->findUserWithDiscord($discord));
 		echo "success";
 	} else {
 		echo "user not found";
 	}
+} else {
+	$error;
 }

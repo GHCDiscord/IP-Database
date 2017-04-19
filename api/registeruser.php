@@ -1,5 +1,5 @@
 <?php
-$require_once __DIR__ . "/../dbconfig.php";
+require_once __DIR__ . "/../dbconfig.php";
 
 $error = false;
 
@@ -33,9 +33,23 @@ if(isset($_POST["discorduser"])){
 }
 
 if($error == false){
+	if(!$user->nameAvailable($name)){
+		$error = "name taken";
+	}
+}
+
+if($error == false){
+	if(!$user->discordAvailable($discorduser)){
+		$error = "discord taken";
+	}
+}
+
+
+
+if($error == false){
 	$expdate = $user->returnExpireDate();
 	$user->register($name, $email, $password, $expdate);
-	$editid = $user->findWithName($name);
+	$editid = $user->findUserWithName($name);
 	$user->setDiscord($editid, $discorduser);
 	echo "success";
 } else {

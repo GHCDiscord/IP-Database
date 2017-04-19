@@ -30,6 +30,12 @@ class USER
        }    
     }
 
+    public function setPassword($password, $id){
+      $new_password = password_hash($password, PASSWORD_DEFAULT);
+      $stmt = $this->db->prepare("UPDATE `Users` SET `Password`=:pass WHERE `ID`=:id");
+      $success = $stmt->execute(array(":pass"=>$new_password, ":id"=>$id));
+      return $success;
+    }
     //Logs User in
     public function login($username,$password){
        try
@@ -127,6 +133,16 @@ class USER
 
     public function nameAvailable($name){
         $stmt = $this->db->prepare("SELECT Username FROM `Users` WHERE Username = :name");
+        $stmt->execute(array(":name"=>$name));
+
+        if($stmt->rowCount() > 0){
+            return false;
+        }
+        return true;
+    }
+
+    public function discordAvailable($name){
+        $stmt = $this->db->prepare("SELECT Username FROM `Users` WHERE DiscordName = :name");
         $stmt->execute(array(":name"=>$name));
 
         if($stmt->rowCount() > 0){

@@ -64,7 +64,7 @@ include "templates/menu.php";
         <div class="form-group">
             <label for="inputDiscord" class="col-sm-2 control-label">Discord</label>
             <div class="col-sm-10">
-                <input type="text" name="discord" class="form-control" id="inputDiscord" <?php echo 'value="' . $user->getData("DiscordName", $editid) . '"'; ?> placeholder="Discord#1234">
+                <input type="text" name="discord" class="form-control" id="inputDiscord" <?php echo 'value="' . $user->getData("DiscordName", $editid) . '"'; ?> placeholder="12345657891011">
             </div>
         </div>
         <div class="form-group">
