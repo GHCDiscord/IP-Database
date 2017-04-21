@@ -5,7 +5,7 @@ PervSealy Site
 
 This is the website for the GHC-Community on Discord (https://discord.gg/3bQ5hE5)
 
-# Setup (OUTDATED: TABLES HAVE BEEN EDITED AND NEW ONES HAVE BEEN ADDED)
+# Setup
 The website requires an MYSQL-Database to work.
 Add your Database-Details in the setup.php and in the dbconfig.php.
 Then run trough the setup.php and save the password for the admin.
