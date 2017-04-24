@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . "/../dbconfig.php";
-
 $error = false;
 
 if(!isset($_POST["token"]) && !$user->verifyToken($_POST["token"])){
@@ -11,6 +10,7 @@ if(isset($_POST["name"])){
 	$name = $_POST["name"];
 } else {
 	$error = "no name";
+	$name = "";
 }
 
 if(isset($_POST["password"])){
@@ -23,13 +23,14 @@ if(isset($_POST["password"])){
 if(isset($_POST["email"])){
 	$email = $_POST["email"];
 } else {
-	$email = "";
+	$email = "no email";
 }
 
 if(isset($_POST["discorduser"])){
 	$discorduser = $_POST["discorduser"];
 } else {
 	$error = "no discord";
+	$discorduser = "";
 }
 
 if($error == false){
@@ -43,8 +44,6 @@ if($error == false){
 		$error = "discord taken";
 	}
 }
-
-
 
 if($error == false){
 	$expdate = $user->returnExpireDate();

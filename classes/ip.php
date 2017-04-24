@@ -40,6 +40,20 @@ class IP {
         }
     }
 
+    public function getTableCount(){
+            $stmt = $this->db->prepare('SELECT * FROM `HackersIP` WHERE 1');
+            $stmt->execute();
+
+            return $stmt->rowCount();
+    }
+
+    public function returnDateCount($date){
+            $stmt = $this->db->prepare('SELECT * FROM `HackersIP` WHERE `Last_Updated`=:lastdate');
+            $stmt->execute(array(":lastdate"=>$date));
+
+            return $stmt->rowCount();
+    }
+
     // Returns a String
     public function returnTable(){
         $stmt = $this->db->prepare('SELECT * FROM `HackersIP` ORDER BY `ID` ASC');
@@ -80,10 +94,14 @@ class IP {
             if($this->reportCount($row["ID"]) >= 5){
                 $class = "danger";
             }
+            $nameCount = "";
+            if($this->nameCount($row["Name"]) > 1){
+                $nameCount = "<button id='{$row['ID']}tooltip' href='#' class='btn btn-link btn-xs btn-alert' data-toggle='tooltip' data-placement='top' title='Dieser Name existiert öfters!'><span class='glyphicon glyphicon-info-sign'</button>";
+            }
 
             $rowString = "<tr id='row{$row["ID"]}' class='{$class}'>
                           <td>  <button class='btn btn-link btn-xs' data-clipboard-text='{$row['IP']}'>" . $row['IP'] . "</button></td>" . 
-                         "<td>" . $row['Name'] . "</td>" . 
+                         "<td>" . $row['Name'] . " {$nameCount}" . "</td>" . 
                          "<td>" . $row['Reputation'] . "</td>" . 
                          "<td>" . $row['Last_Updated'] . "</td>" . 
                          "<td>" . $row['Description'] . "</td>" . 
@@ -110,6 +128,12 @@ class IP {
         return true;
     }
 
+    public function nameCount($str){
+        $stmt = $this->db->prepare("SELECT * FROM `HackersIP` WHERE `Name`=:name");
+        $stmt->execute(array(":name"=>$str));
+
+        return $stmt->rowCount();
+    }
     public function setIP($ip, $id){
         $stmt = $this->db->prepare("UPDATE `HackersIP` SET `IP`=:ip WHERE `ID`=:id");
         $stmt->execute(array(":ip"=>$ip, ":id"=>$id));

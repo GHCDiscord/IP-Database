@@ -92,11 +92,12 @@ include "templates/menu.php";
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" name="edituser" class="btn btn-success">Update</button>
                 <button type="submit" name="deleteuser" value="Delete" class="btn btn-danger">Delete</button>
+                <button type="submit" name="edituser" class="btn btn-success">Update</button>
             </div>
         </div>
     </form>
     <h3>Diese IP wurde gemeldet von:</h3>
     <?php echo $ip->listReportNames($editid);?>
 </div>
+

@@ -88,7 +88,13 @@ $string = $ip->returnTable();
 
         <!-- Modal begins here -->
         <div class="col-xs-6">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIPModal">Neue IP</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" id="openModalButton" data-target="#addIPModal">Neue IP</button>
+            <script type="text/javascript">
+				$('#addIPModal').on('shown.bs.modal', function () {
+				  getElementById("inputIP").focus()
+				  return false
+				})
+            </script>
 
             <div class="modal fade" id="addIPModal" tabindex="-1" role="dialog" aria-labelledby="addIPLabel">
                 <div class="modal-dialog" role="document">
@@ -101,12 +107,12 @@ $string = $ip->returnTable();
                             <form id="addIPForm" action="?addIP=1" method="post">
                                 <div class="form-group" id="IPDiv">
                                     <label for="inputIP">IP</label>
-                                    <input type="text" name="IP" id="inputIP" class="form-control" placeholder="123.123.123.123" onchange="checkifIPRegistered(this.value)">
+                                    <input autofocus type="text" name="IP" id="inputIP" class="form-control" placeholder="123.123.123.123" onchange="checkifIPRegistered(this.value)">
                                     <span id="IPMessage" class="help-block"></span>
                                 </div>
                                 <div class="form-group" id="nameDiv">
                                     <label for="inputName">Name</label>
-                                    <input type="text" name="name" class="form-control" id="inputName" placeholder="MaxDerHacker">
+                                    <input type="text" name="name" class="form-control" id="inputName" placeholder="MaxDerHacker" onchange="checkifIPNameRegistered(this.value)">
                                     <span id="nameMessage" class="help-block"></span>
                                 </div>
                                 <div class="form-group" id="reputationDiv">
@@ -134,6 +140,7 @@ $string = $ip->returnTable();
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary" form="addIPForm">Add IP</button>
+
                         </div> <!-- Modal Footer -->
                     </div> <!-- Modal Content -->
                 </div> <!-- Modal-Dialog -->
@@ -141,7 +148,7 @@ $string = $ip->returnTable();
         </div> <!-- col-xs-6 -->
 
 
-            <table class="table sortable table-responsive"  id="myTable">
+            <table class="table sortable table-responsive tablesorter"  id="myTable">
                 <thead>
                     <tr>
                         <th>IP</th>
@@ -203,7 +210,33 @@ $string = $ip->returnTable();
         }
     }
 </script>
-
+<script type="text/javascript">
+        function checkifIPNameRegistered(str) {
+        if(str == ""){
+            document.getElementById("IPMessage").innerHTML = "";
+            return;
+        } else {
+            if(window.XMLHttpRequest){
+                xmlhttp = new XMLHttpRequest();
+            }else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200){
+                if(this.responseText == "false"){
+                    document.getElementById("nameMessage").innerHTML = "<p class='has-success'>Dieser Name ist noch nicht eingetragen!</p>";
+                    document.getElementById("nameDiv").className = "form-group has-success";
+                } else {
+                    document.getElementById("nameMessage").innerHTML = "<p class='has-error'>Dieser Name wurde schon mal eingetragen!</p>";
+                    document.getElementById("nameDiv").className = "form-group has-error";
+                }
+            }
+        }; // OnReadyStateChange
+        xmlhttp.open("GET","api/checkifipnameregistered.php?q="+str,true);
+        xmlhttp.send();
+        }
+    }
+</script>
 <script type="text/javascript">
     function report(id){
             if(window.XMLHttpRequest){
@@ -253,6 +286,9 @@ $string = $ip->returnTable();
     $(document).ready(function() 
         { 
             $("#myTable").tablesorter(); 
+            $(function(){
+             $('[data-toggle="tooltip"]').tooltip()
+         	});
         } 
     );     
 </script>
@@ -300,7 +336,10 @@ function searchTable(){
 }
 
 
+
 </script>
+
+<a style="text-align: center" href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Data leak found! Please click the link for further information. ( ͡° ͜ʖ ͡°)</a>
 <?php
 include "templates/footer.php";
 

@@ -76,6 +76,12 @@ class USER
           return false;
     }
 
+    public function getTableCount(){
+            $stmt = $this->db->prepare('SELECT * FROM `Users` WHERE 1');
+            $stmt->execute();
+
+            return $stmt->rowCount();
+    }
 
     //Checks if User is loggedIn
     public function is_loggedin(){
