@@ -68,8 +68,8 @@ include "templates/navbar.php";
 
         <form action="?login=1" method="post" class="">
             <div class="form-group">
-                <label for="inputUsername">Username/E-Mail</label>
-                <input type="text" name="name" id="inputUsername" class="form-control" placeholder="Username/E-Mail">
+                <label for="inputUsername">Username</label>
+                <input type="text" name="name" id="inputUsername" class="form-control" placeholder="Username">
             </div>
 
             <div class="form-group">

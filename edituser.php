@@ -26,13 +26,11 @@ if(isset($_POST["refreshuser"])){
 
 if(isset($_POST["edituser"])){
     $name = $_POST["name"];
-    $email = $_POST["email"];
     $role = $_POST["role"];
     $discord = $_POST["discord"];
     echo "<script>console.log('$role')</script>";
     $user->setRole($editid, $role);
     $user->setName($editid, $name);
-    $user->setEmail($editid, $email);
     $user->setDiscord($editid, $discord);
     $user->redirect("admin.php?editsuccess=1");
 }
@@ -61,12 +59,6 @@ include "templates/navbar.php";
             <label for="inputDiscord" class="col-sm-2 control-label">Discord</label>
             <div class="col-sm-10">
                 <input type="text" name="discord" class="form-control" id="inputDiscord" <?php echo 'value="' . $user->getData("DiscordName", $editid) . '"'; ?> placeholder="12345657891011">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="inputEmail" class="col-sm-2 control-label">E-Mail</label>
-            <div class="col-sm-10">
-                <input type="email" name="email" class="form-control" id="inputEmail" <?php echo 'value="' . $user->getData("Email", $editid) . '"'; ?> placeholder="E-Mail">
             </div>
         </div>
         <div class="form-group">

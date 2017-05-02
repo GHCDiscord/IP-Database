@@ -16,6 +16,7 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script> 
+    <script type="text/javascript" src="js/site.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css"/>

@@ -39,7 +39,6 @@ $string = $user->returnTable();
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>E-Mail</th>
                     <th>Rolle</th>
                     <th>Last Login (Y-M-D H:M:S)</th>
                     <th>Discord</th>
