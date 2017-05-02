@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="GHC-Team" />
+    <meta name="description" content="Die offizielle Seite der German Hacker Community" />
+    <meta name="keywords" content="Hackers - Hacking simulator App Game Spiel GHC German Hacker Community" />
 
     <title>German Hackers Community</title>
     <!-- Icon -->
