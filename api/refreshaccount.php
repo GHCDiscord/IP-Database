@@ -4,7 +4,7 @@ require_once __DIR__ . "/../dbconfig.php";
 // THIS SITE REQUIRES: TOKEN, DiscordName
 
 $error = false;
-if(!isset($_POST["token"]) && !$user->verifyToken($_POST["token"])){
+if(!isset($_POST["token"]) || !$user->verifyToken($_POST["token"])){
 	$error = "wrong token";
 }
 

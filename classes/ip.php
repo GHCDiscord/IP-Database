@@ -119,8 +119,8 @@ class IP {
     }
 
     public function ipAvailable($str){
-        $stmt = $this->db->prepare("SELECT * FROM `HackersIP` WHERE `IP` ='{$str}'");
-        $stmt->execute();
+        $stmt = $this->db->prepare("SELECT * FROM `HackersIP` WHERE `IP` =:ip");
+        $stmt->execute(array(":ip"=>$str));
 
         if($stmt->rowCount() > 0){
             return false;
