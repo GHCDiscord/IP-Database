@@ -1,5 +1,4 @@
 <?php
-
 require_once "dbconfig.php";
 
 if(!$user->is_loggedin()){
@@ -14,9 +13,9 @@ if(isset($_GET["error"])){
     $error = true;
 }
 
-
 include "templates/header.php";
-include "templates/menu.php";
+include "templates/navbar.php";
+
 $string = $user->returnTable();
 ?>
 
@@ -121,5 +120,4 @@ function searchTable(){
 
 
 </script>
-<?php
-include 'templates/footer.php';
+<?php include 'templates/footer.php'; ?>

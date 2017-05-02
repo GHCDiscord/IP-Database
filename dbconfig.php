@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$DB_host = "INSERT HERE";
-$DB_user = "INSERT HERE";
-$DB_pass = "INSERT HERE";
-$DB_name = "INSERT HERE";
+$DB_host = "localhost";
+$DB_user = "d0261fc2";
+$DB_pass = "da1en#ban8";
+$DB_name = "d0261fc2";
 $charset = "utf8";
 
 try
@@ -14,7 +14,7 @@ try
 }
 catch(PDOException $e)
 {
-     echo $e->getMessage();
+
 }
 
 

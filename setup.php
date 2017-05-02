@@ -1,19 +1,20 @@
 <?php
 
-$DB_host = "";
-$DB_user = "";
-$DB_pass = "";
-$DB_name = "";
-$charset = "";
+$DB_host = "localhost";
+$DB_user = "d0261fc2";
+$DB_pass = "da1en#ban8";
+$DB_name = "d0261fc2";
+$charset = "utf8";
 
 try
 {
      $DB_con = new PDO("mysql:host={$DB_host};dbname={$DB_name};charset={$charset}",$DB_user,$DB_pass);
      $DB_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+     echo "setup.php: Connected successfully to database.";
 }
 catch(PDOException $e)
 {
-     echo $e->getMessage();
+     echo "setup.php: Connection to database failed: " . $e->getMessage();
 }
 
 

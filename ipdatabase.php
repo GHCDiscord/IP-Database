@@ -1,6 +1,7 @@
 <?php
-
 require_once 'dbconfig.php';
+include "templates/header.php";
+include "templates/navbar.php";
 
 if($user->is_loggedin())
 {
@@ -41,7 +42,6 @@ if(isset($_GET["addIP"])){
         echo 'Beim Abspeichern ist leider ein Fehler aufgetreten<br>';
         }
     }
-
 }
 
 function message_error($id, $idDiv, $message){
@@ -55,9 +55,6 @@ function message_error($id, $idDiv, $message){
     </script>
     ";
 }
-
-include "templates/header.php";
-include "templates/menu.php";
 
 $string = $ip->returnTable();
 ?>
@@ -148,7 +145,7 @@ $string = $ip->returnTable();
         </div> <!-- col-xs-6 -->
 
 
-            <table class="table sortable table-responsive tablesorter"  id="myTable">
+            <table class="table sortable table-responsive tablesorter ipTable" id="myTable" style="margin-top: 100px;">
                 <thead>
                     <tr>
                         <th>IP</th>
@@ -338,9 +335,6 @@ function searchTable(){
 
 
 </script>
-
-<a style="text-align: center" href="https://www.youtube.com/watch?v=oHg5SJYRHA0">Data leak found! Please click the link for further information. ( ͡° ͜ʖ ͡°)</a>
 <?php
 include "templates/footer.php";
-
 ?>

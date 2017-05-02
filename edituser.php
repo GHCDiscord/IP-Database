@@ -1,6 +1,6 @@
 <?php
-
 require_once "dbconfig.php";
+
 $editid = $_GET["id"];
 if(!$user->is_loggedin()){
     $user->redirect("login.php");
@@ -37,12 +37,8 @@ if(isset($_POST["edituser"])){
     $user->redirect("admin.php?editsuccess=1");
 }
 
-
-
-
-
 include "templates/header.php";
-include "templates/menu.php";
+include "templates/navbar.php";
 ?>
 
 <div class="container">
@@ -93,3 +89,6 @@ include "templates/menu.php";
         </div>
     </form>
 </div>
+<?php
+include "templates/footer.php";
+?>

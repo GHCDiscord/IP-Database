@@ -15,7 +15,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <!--<li><a href="index.php">Home</a></li>-->
-        <li><a href="ipdatabase.php">IPs</a></li>
+        <li><a href="ipdatabase.php"><i class='fa fa-laptop fa-lg' aria-hidden='true'></i>&nbsp; IPs</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -23,19 +23,20 @@
         if($user->is_loggedin()){
           $userid = $_SESSION["User"];
           if($user->hasRole($userid, "Admin")){
-            echo "<li><a href='admin.php'><span class='glyphicon glyphicon-edit'></span> Admin</a></li>";
+            echo "<li><a href='admin.php'><i class='fa fa-pencil-square-o fa-lg' aria-hidden='true'></i>&nbsp; Admin</a></li>";
           }
 
-          echo "<li class='dropdown'>
-          <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>" . $user->getName($userid) . "<span class='caret'></span></a>
+          echo 
+          "<li class='dropdown'>
+          <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'><i class='fa fa-user-circle-o fa-lg' aria-hidden='true'></i>&nbsp; ". $user->getName($userid) ." &nbsp;<span class='caret'></span></a>
           <ul class='dropdown-menu'>
-            <li><a href='usersettings.php'>Settings</a></li>
+            <li><a href='usersettings.php'><i class='fa fa-wrench fa-fw' aria-hidden='true'></i>&nbsp; Settings</a></li>
             <li role='separator' class='divider'></li>
-            <li><a href='logout.php'><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>
+            <li><a href='logout.php'><i class='fa fa-sign-out fa-fw' aria-hidden='true'></i>&nbsp; Logout</a></li>
           </ul>
           </li>";
         } else {
-          echo "<li><a href='login.php'>Login</a></li>";
+          echo "<li><a href='login.php'><i class='fa fa-sign-in fa-lg' aria-hidden='true'></i>&nbsp; Login</a></li>";
           //echo "<li><a href='register.php'>Register</a></li>";
         }
 

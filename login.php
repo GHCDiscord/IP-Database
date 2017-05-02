@@ -29,9 +29,7 @@ if(isset($_GET["login"])){
 }
 
 include 'templates/header.php';
-include 'templates/menu.php';
-
-
+include "templates/navbar.php";
 ?>
 
 <div class="container">
@@ -86,3 +84,4 @@ include 'templates/menu.php';
 
 <?php
 include 'templates/footer.php';
+?>
