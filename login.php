@@ -78,7 +78,7 @@ include "templates/navbar.php";
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-        <label><p>Noch keinen Account? Regestriere dich auf unserem Discordserver mit unserem Bot!</label>
+        <label style="margin-top: 10px;"><p>Noch keinen Account? Regestriere dich auf unserem Discordserver mit unserem Bot!</label>
     </div> <!-- Col Md 12 -->
 </div> <!-- Container -->
 

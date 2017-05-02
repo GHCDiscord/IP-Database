@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$DB_host = "localhost";
-$DB_user = "d0261fc2";
-$DB_pass = "da1en#ban8";
-$DB_name = "d0261fc2";
+$DB_host = "";
+$DB_user = "";
+$DB_pass = "";
+$DB_name = "";
 $charset = "utf8";
 
 try
