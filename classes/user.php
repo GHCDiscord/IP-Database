@@ -8,16 +8,15 @@ class USER
     }
 
     //Registers a new user
-    public function register($username, $email="",$password, $expdate){
+    public function register($username, $password, $expdate){
        try
        {
            $new_password = password_hash($password, PASSWORD_DEFAULT);
    
-           $stmt = $this->db->prepare("INSERT INTO `Users`(Username,Email,Password, ExpireDate) 
-                                                       VALUES(:uname, :umail, :upass, :expdate)");
+           $stmt = $this->db->prepare("INSERT INTO `Users`(Username, Password, ExpireDate) 
+                                                       VALUES(:uname, :upass, :expdate)");
               
            $stmt->bindparam(":uname", $username);
-           $stmt->bindparam(":umail", $email);
            $stmt->bindparam(":upass", $new_password);  
            $stmt->bindparam(":expdate", $expdate);
            $stmt->execute(); 
@@ -40,8 +39,8 @@ class USER
     public function login($username,$password){
        try
        {
-          $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE Username=:uname OR Email=:umail LIMIT 1");
-          $stmt->execute(array(':uname'=>$username, ':umail'=>$username));
+          $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE Username=:uname LIMIT 1");
+          $stmt->execute(array(':uname'=>$username));
           $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
           if($stmt->rowCount() > 0)
           {
@@ -65,8 +64,8 @@ class USER
     }
 
     public function loginDataCorrect($username, $password){
-          $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE Username=:uname OR Email=:umail LIMIT 1");
-          $stmt->execute(array(':uname'=>$username, ':umail'=>$username));     
+          $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE Username=:uname LIMIT 1");
+          $stmt->execute(array(':uname'=>$username));     
           if($stmt->rowCount() > 0){
               $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
               if(password_verify($password, $userRow['Password'])){
@@ -155,18 +154,6 @@ class USER
             return false;
         }
         return true;
-    }
-
-    public function emailAvailable($email){
-        if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $stmt = $this->db->prepare("SELECT EMail FROM `Users` WHERE Email = :email");
-            $stmt->execute(array(":email"=>$email));
-            if($stmt->rowCount() > 0){
-                return false;
-            }
-            return true;
-        }
-        return false;
     }
 
     public function findUserWithName($name){
@@ -283,12 +270,6 @@ class USER
         return $success;
     }
 
-    public function setEmail($id, $email){
-        $stmt = $this->db->prepare("UPDATE `Users` SET `Email`=:mail WHERE `ID`=:id");
-        $success = $stmt->execute(array(":id"=>$id, ":mail"=>$email));
-
-        return $success;
-    }
     public function setDiscord($id, $discord){
         $stmt = $this->db->prepare("UPDATE `Users` SET `DiscordName`=:discord WHERE `ID`=:id");
         $success = $stmt->execute(array(":id"=>$id, ":discord"=>$discord));
@@ -337,7 +318,6 @@ class USER
             $rowString = "<tr>
                 <td> {$row['ID']} </td>
                 <td> {$row['Username']} </td>
-                <td>" . $row['Email'] . "</td>
                 <td>" . $row['Role'] . "</td>
                 <td>" . $row['Last_Login'] . "</td>
                 <td>" . $row['DiscordName'] . "</td>

@@ -20,6 +20,7 @@ if(isset($_POST["edituser"])){
 
 if(isset($_POST["editpassword"])){
     $error == false;
+    $success == false;
     $oldPassword = $_POST["oldPassword"];
     $newPassword = $_POST["newPassword"];
     $repeatNewPassword = $_POST["repeatNewPassword"];
@@ -31,6 +32,7 @@ if(isset($_POST["editpassword"])){
     if($user->loginDataCorrect($user->getData("Username", $_SESSION["User"]), $oldPassword)){
         if($repeatNewPassword == $newPassword){
             $user->setPassword($newPassword, $_SESSION["User"]);
+            $success = "Passwort erfolgreich geändert!";
         } else {
             $error = "Das neue Passwort stimmt nicht überein!";
         }
@@ -38,22 +40,12 @@ if(isset($_POST["editpassword"])){
         $error = "Das alte Passwort ist falsch!";
     }
 }
-
 include "templates/header.php";
-include "templates/menu.php";
+include "templates/navbar.php";
 ?>
 
 
 <div class="container">
-    <?php
-    if(isset($error) && $error != false){
-        echo "<div class='alert alert-danger alert-dismissible fade in' role='alert'> 
-        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-        <span aria-hidden='true'>×</span></button> 
-        <p>{$error}</p> 
-    </div>";
-    }
-    ?>
     <form class="form-horizontal" action="usersettings.php<?php echo "?id={$editid}" ?>" method="post">
         <div class="form-group">
             <label for="inputRep" class="col-sm-2 control-label">Reputation</label>
@@ -108,8 +100,24 @@ include "templates/menu.php";
     </form>
     <?php
     }
+
+    if(isset($error) && $error != false){
+        echo "<div style='margin-top: 50px;' class='alert alert-danger alert-dismissible fade in' role='alert'> 
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>×</span></button> 
+        <p>{$error}</p> 
+    </div>";
+    }
+    if(isset($success) && $success != false){
+        echo "<div style='margin-top: 50px;' class='alert alert-success alert-dismissible fade in' role='alert'> 
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+        <span aria-hidden='true'>×</span></button> 
+        <p>{$success}</p> 
+    </div>";
+    }
     ?>
 </div>
 
 <?php
 include "templates/footer.php";
+?>

@@ -1,5 +1,4 @@
 <?php
-
 require_once "dbconfig.php";
 
 if(!$user->is_loggedin()){
@@ -14,9 +13,9 @@ if(isset($_GET["error"])){
     $error = true;
 }
 
-
 include "templates/header.php";
-include "templates/menu.php";
+include "templates/navbar.php";
+
 $string = $user->returnTable();
 ?>
 
@@ -40,7 +39,6 @@ $string = $user->returnTable();
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>E-Mail</th>
                     <th>Rolle</th>
                     <th>Last Login (Y-M-D H:M:S)</th>
                     <th>Discord</th>
@@ -121,5 +119,4 @@ function searchTable(){
 
 
 </script>
-<?php
-include 'templates/footer.php';
+<?php include 'templates/footer.php'; ?>

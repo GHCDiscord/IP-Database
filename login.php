@@ -29,9 +29,7 @@ if(isset($_GET["login"])){
 }
 
 include 'templates/header.php';
-include 'templates/menu.php';
-
-
+include "templates/navbar.php";
 ?>
 
 <div class="container">
@@ -70,8 +68,8 @@ include 'templates/menu.php';
 
         <form action="?login=1" method="post" class="">
             <div class="form-group">
-                <label for="inputUsername">Username/E-Mail</label>
-                <input type="text" name="name" id="inputUsername" class="form-control" placeholder="Username/E-Mail">
+                <label for="inputUsername">Username</label>
+                <input type="text" name="name" id="inputUsername" class="form-control" placeholder="Username">
             </div>
 
             <div class="form-group">
@@ -80,9 +78,10 @@ include 'templates/menu.php';
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-        <label><p>Noch keinen Account? Regestriere dich auf unserem Discordserver mit unserem Bot!</label>
+        <label style="margin-top: 10px;"><p>Noch keinen Account? Regestriere dich auf unserem Discordserver mit unserem Bot!</label>
     </div> <!-- Col Md 12 -->
 </div> <!-- Container -->
 
 <?php
 include 'templates/footer.php';
+?>

@@ -19,13 +19,6 @@ if(isset($_POST["password"])){
 	$error = "no password";
 }
 
-// OPTIONAL
-if(isset($_POST["email"])){
-	$email = $_POST["email"];
-} else {
-	$email = "no email";
-}
-
 if(isset($_POST["discorduser"])){
 	$discorduser = $_POST["discorduser"];
 } else {
@@ -47,7 +40,7 @@ if($error == false){
 
 if($error == false){
 	$expdate = $user->returnExpireDate();
-	$user->register($name, $email, $password, $expdate);
+	$user->register($name, $password, $expdate);
 	$editid = $user->findUserWithName($name);
 	$user->setDiscord($editid, $discorduser);
 	echo "success";

@@ -1,5 +1,6 @@
 <?php
 require_once "dbconfig.php";
+
 $editid = $_GET["id"];
 
 if(!$user->is_loggedin()){
@@ -38,9 +39,8 @@ if(isset($_POST["edituser"])){
     $user->redirect("ipdatabase.php?editsuccess=1");
 
 }
-
 include "templates/header.php";
-include "templates/menu.php";
+include "templates/navbar.php";
 ?>
 <div class="container">
     <?php
@@ -100,4 +100,4 @@ include "templates/menu.php";
     <h3>Diese IP wurde gemeldet von:</h3>
     <?php echo $ip->listReportNames($editid);?>
 </div>
-
+<?php include "templates/footer.php";?>
