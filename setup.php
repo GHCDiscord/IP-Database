@@ -24,7 +24,6 @@ CREATE TABLE `Users` (
  `Username` varchar(255) NOT NULL,
  `DiscordName` varchar(255) DEFAULT NULL,
  `Password` varchar(255) NOT NULL,
- `Email` varchar(255) NOT NULL,
  `Role` enum('Admin','Moderator','User') NOT NULL DEFAULT 'User',
  `Reputation` int(11) DEFAULT NULL,
  `Last_Login` datetime NOT NULL,
