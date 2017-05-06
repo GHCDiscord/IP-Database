@@ -56,15 +56,18 @@ class IP {
 
     // Returns a String
     public function returnTable(){
-        $stmt = $this->db->prepare('SELECT `IP`, `Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username` FROM `HackersIP` 
+        $stmt = $this->db->prepare('SELECT `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo` FROM `HackersIP` 
 LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
 JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
+JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
+LEFT JOIN (SELECT COUNT(1) AS `CountIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` GROUP BY `IPUserReport`.`IPID`) AS `CountsIPRepo` ON `CountsIPRepo`.`IPID` = `HackersIP`.`ID`
+LEFT JOIN (SELECT COUNT(1) AS `UserIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` WHERE `IPUserReport`.`UserID` = :uid GROUP BY `IPUserReport`.`IPID`) AS `UsersIPRepo` ON `UsersIPRepo`.`IPID` = `HackersIP`.`ID`
 WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_Login` IS NULL');
-        
+
+ $stmt->bindParam(':uid', $_SESSION['User']);
         $stmt->execute();
         
-        /*$row = $stmt->fetch(PDO::FETCH_ASSOC);
-        var_dump($row);*/
+        
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
           
