@@ -1,4 +1,4 @@
-<?
+<?php
 class IP {
     private $db;
     
@@ -56,20 +56,20 @@ class IP {
 
     // Returns a String
     public function returnTable(){
-        $stmt = $this->db->prepare('SELECT * FROM `HackersIP` ORDER BY `ID` ASC');
+        $stmt = $this->db->prepare('SELECT `IP`, `Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username` FROM `HackersIP` 
+LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
+JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
+WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_Login` IS NULL');
         
         $stmt->execute();
         
+        /*$row = $stmt->fetch(PDO::FETCH_ASSOC);
+        var_dump($row);*/
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            $user = new USER($this->db);
-            $userID = $user->findUserWithName($row["Name"]);
+          
 
-            if(!($user->isExpired($userID))){
-                continue;
-            }
-
-            if($user->hasReported($_SESSION["User"], $row["ID"])){
+            if($row["UserIPRepo"] > 0){
                 $onclick = "unreport";
                 $symbol = "glyphicon glyphicon-ok";
                 $color = "btn-success";
@@ -79,23 +79,24 @@ class IP {
                 $symbol = "glyphicon glyphicon-alert";
                 $color = "btn-warning";
                 $title = "Report";
-            }
+            } 
             $class = "";
             // Reputation größer als 75% der eigenen
-            if($row["Reputation"] > ($user->getData("Reputation", $_SESSION["User"]) * 0.75) && !$user->reputationIsNull($_SESSION["User"]) ){
+            if($row["Reputation"] > $_SESSION["Rep"] * 0.75 && !$_SESSION["Rep"] == 0){
                 $class = "info";
             }
-
+       
+           
             // Reputation kleiner als 25% der Eigenen
-            if($row["Reputation"] < ($user->getData("Reputation", $_SESSION["User"]) * 0.25) && !$user->reputationIsNull($_SESSION["User"]) ){
+            if($row["Reputation"] < $_SESSION["Rep"] * 0.25 && !$_SESSION["Rep"] == 0){
                 $class = "warning";
             }
-
-            if($this->reportCount($row["ID"]) >= 5){
-                $class = "danger";
-            }
+             
+            //if($$row["CountIPRepo"] >= 5){
+           //     $class = "";
+          //  }
             $nameCount = "";
-            if($this->nameCount($row["Name"]) > 1){
+            if($row["CountName"] > 1){
                 $nameCount = "<button id='{$row['ID']}tooltip' href='#' class='btn btn-link btn-xs btn-alert' data-toggle='tooltip' data-placement='top' title='Dieser Name existiert öfters!'><span class='glyphicon glyphicon-info-sign'</button>";
             }
 
@@ -107,15 +108,16 @@ class IP {
                          "<td>" . $row['Description'] . "</td>" . 
                          "<td>" . $row['Miners'] . "</td>" .
                          "<td>" . $row['Clan'] . "</td>" .
-                         "<td>" . $user->getName($row['Added_By']) . "</td>" . 
+                         "<td>" . $row['Username'] . "</td>" . 
                          "<td><a id='report{$row['ID']}' onclick='{$onclick}({$row['ID']})' data-placement='top' data-toggle='tooltip' title='{$title}' class='btn {$color} btn-xs'><span class='{$symbol}'></span></a>" . "</td>";
-                         if($user->hasRole($_SESSION["User"], "Admin") || $user->hasRole($_SESSION["User"], "Moderator")){
+                         if($_SESSION["Role"] == "Admin" || $_SESSION["Role"] == "Moderator"){
                              $rowString .= "<td><a href='editip.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-success btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>";
                          }
                          $rowString .= "</tr>";
-            $returnString .= $rowString;
+          $returnString .= $rowString;
+       //  echo $rowString;
         }
-        return $returnString;
+       return $returnString;
     }
 
     public function ipAvailable($str){

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once 'dbconfig.php';
 
 if($user->is_loggedin()){
@@ -18,6 +18,8 @@ if(isset($_GET["login"])){
 
         } else {
             if($user->login($uname, $password)){
+            	$user->GetUserRole($userid, $userid);
+                $user->GetUserRep($userid);
                 $user->redirect("ipdatabase.php");
             } else {
                 $error = true;

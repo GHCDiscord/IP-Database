@@ -246,11 +246,20 @@ class USER
         $expdate = date('Y-m-d', strtotime("+30 days"));
         return $expdate;
     }
+    public function GetUserRole($id){
+        $stmt = $this->db->prepare("SELECT `Role` FROM `Users` WHERE ID =:id ORDER BY `ID` ASC");
+        $stmt->execute(array(":id"=>$id));
+        $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['Role'] = $userRow['Role'];
+        }
+    
+  
     public function hasRole($id, $role){
         $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID =:id ORDER BY `ID` ASC");
         $stmt->execute(array(":id"=>$id));
         $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($userRow['Role'] == $role){
+        $_SESSION['Role'] = $userRow['Role'];
+       if($userRow['Role'] == $role){
             return true;
         }
         return false;
@@ -283,11 +292,24 @@ class USER
         return $success;
     }
 
+    
+public function GetUserRep($id){
+$stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
+      $stmt->execute(array(":id"=>$id));
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $_SESSION['Rep'] = $row['Reputation'];
+      }
+
+
+
+
     public function reputationIsNull($id){
       $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
       $stmt->execute(array(":id"=>$id));
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $_SESSION['Rep'] = $row['Reputation'];
       if($row["Reputation"] == 0 || $row["Reputation"] == NULL){
         return true;
       } else {
