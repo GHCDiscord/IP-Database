@@ -56,7 +56,7 @@ class IP {
 
     // Returns a String
     public function returnTable(){
-        $stmt = $this->db->prepare('SELECT `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo` FROM `HackersIP` 
+        $stmt = $this->db->prepare('SELECT `ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo` FROM `HackersIP` 
 LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
 JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
 JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
@@ -66,7 +66,6 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
 
  $stmt->bindParam(':uid', $_SESSION['User']);
         $stmt->execute();
-        
         
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -95,9 +94,9 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
                 $class = "warning";
             }
              
-            //if($$row["CountIPRepo"] >= 5){
-           //     $class = "";
-          //  }
+            if($$row["CountIPRepo"] >= 5){
+               $class = "";
+          }
             $nameCount = "";
             if($row["CountName"] > 1){
                 $nameCount = "<button id='{$row['ID']}tooltip' href='#' class='btn btn-link btn-xs btn-alert' data-toggle='tooltip' data-placement='top' title='Dieser Name existiert öfters!'><span class='glyphicon glyphicon-info-sign'</button>";
@@ -118,7 +117,7 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
                          }
                          $rowString .= "</tr>";
           $returnString .= $rowString;
-       //  echo $rowString;
+       
         }
        return $returnString;
     }
