@@ -1,11 +1,17 @@
 <?php
+
+$start = microtime(true);
+
 require_once 'dbconfig.php';
+
 include "templates/header.php";
 include "templates/navbar.php";
 
 if($user->is_loggedin())
 {
     $loggedin = true;
+    $user->GetUserRole($_SESSION["User"]);
+                $user->GetUserRep($_SESSION["User"]);
 } else {
     $loggedin = false;
 }
@@ -158,7 +164,7 @@ $string = $ip->returnTable();
                         <th>Added By</th>
                         <th>Report</th>
                         <?php
-                        if($user->hasRole($_SESSION["User"], "Moderator") || $user->hasRole($_SESSION["User"], "Admin")){
+                        if($_SESSION["Role"] == "Moderator" || $_SESSION["Role"] == "Admin"){
                             echo "<th>Edit</th>";
                         }
                         ?>
@@ -337,4 +343,10 @@ function searchTable(){
 </script>
 <?php
 include "templates/footer.php";
+
+
+
+$end = microtime(true);
+$creationtime = ($end - $start);
+printf("Page created in %.6f seconds.", $creationtime);
 ?>
