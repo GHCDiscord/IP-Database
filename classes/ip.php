@@ -56,7 +56,7 @@ class IP {
 
     // Returns a String
     public function returnTable(){
-        $stmt = $this->db->prepare('SELECT `ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo` FROM `HackersIP` 
+        $stmt = $this->db->prepare('SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo` FROM `HackersIP` 
 LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
 JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
 JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
