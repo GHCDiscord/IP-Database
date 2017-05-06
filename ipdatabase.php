@@ -61,8 +61,9 @@ function message_error($id, $idDiv, $message){
     </script>
     ";
 }
-
+if($loggedin){
 $string = $ip->returnTable();
+}
 ?>
 <div class="container">
     <div class="col-xs-12">
