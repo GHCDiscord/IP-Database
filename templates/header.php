@@ -8,7 +8,7 @@
     <meta name="description" content="Die offizielle Seite der German Hacker Community" />
     <meta name="keywords" content="Hackers - Hacking simulator App Game Spiel GHC German Hacker Community" />
 
-    <title>German Hackers Community</title>
+    <title>GHC</title>
     <!-- Icon -->
     <link rel="shortcut icon" href="images/icon.ico" />
     <!-- Bootstrap -->
@@ -19,6 +19,7 @@
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script> 
+    <script type="text/javascript" src="js/clipboard.min.js"></script>
     <script type="text/javascript" src="js/site.js"></script>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">

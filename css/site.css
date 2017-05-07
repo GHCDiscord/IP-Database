@@ -1,0 +1,27 @@
+table.tablesorter {
+    text-align: left;
+}
+
+table.tablesorter th:not(.headerSortDown):not(.headerSortUp):not(.sorter-false) {
+    background-image: url('../images/bg.gif');
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+}
+
+table.tablesorter th.headerSortDown:not(.sorter-false) {
+    background-image: url('../images/asc.gif');
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+
+table.tablesorter th.headerSortUp:not(.sorter-false) {
+    background-image: url('../images/desc.gif');
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+
+table.tablesorter th.headerSortDown:not(.sorter-false),
+table.tablesorter th.headerSortUp:not(.sorter-false) {
+    background-color: #28415b;
+}
