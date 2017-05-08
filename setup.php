@@ -28,7 +28,8 @@ CREATE TABLE `Users` (
  `Reputation` int(11) DEFAULT NULL,
  `Last_Login` datetime NOT NULL,
  `ExpireDate` date NOT NULL,
- PRIMARY KEY (`ID`)
+ PRIMARY KEY (`ID`),
+ UNIQUE KEY `Username` (`Username`)
 ) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=latin1
 ";
 
