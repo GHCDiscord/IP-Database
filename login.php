@@ -1,6 +1,7 @@
 <?php
 require_once 'dbconfig.php';
-
+$accountexpired = "";
+$error = "";
 if($user->is_loggedin()){
     $user->redirect('index.php');
 }

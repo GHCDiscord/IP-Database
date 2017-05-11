@@ -1,4 +1,6 @@
 <?php
+//error_reporting(E_ALL);
+
 require_once 'dbconfig.php';
 
 if($user->is_loggedin())
@@ -9,6 +11,6 @@ if($user->is_loggedin())
 }
 
 include "templates/header.php";
-include "templates/menu.php";
+include "templates/navbar.php";
 
 ?>
