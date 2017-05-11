@@ -66,7 +66,6 @@ $string = $ip->returnTable();
 }
 ?>
 <div class="container">
-    <div class="col-xs-12">
     <?php
 
     if(!$loggedin){
@@ -85,21 +84,31 @@ $string = $ip->returnTable();
                     </div>';
             } 
     ?>
-        <div class="col-xs-6">
-            <input type="search" id="myInput" onkeyup="searchTable()" class="form-control" placeholder="Search">     
-        </div>
-
-
-        <!-- Modal begins here -->
-        <div class="col-xs-6">
-            <button type="button" class="btn btn-primary" data-toggle="modal" id="openModalButton" data-target="#addIPModal">Neue IP</button>
             <script type="text/javascript">
 				$('#addIPModal').on('shown.bs.modal', function () {
 				  getElementById("inputIP").focus()
 				  return false
 				})
-            </script>
+            </script>     
 
+         <div id="tableInfo" style="margin-top: 15px;">
+            <h4>Um die Tabelle nach mehreren Spalten gleichzeitig zu sortieren, halte 'Shift' und wähle die anderen Spalten aus.</h4>
+            <h4>Du kannst eine IP kopieren, indem du auf sie klickst.</h4>
+        </div>
+
+        <div style="margin-top: 25px;">
+            <form class="form-inline">
+                <label class="sr-only" for="inlineFormInput">Search</label>
+                <input type="search" id="myInput" onkeyup="searchTable()" class="form-control mb-2 mr-sm-2 mb-sm-0" placeholder="Search" style="margin-right: 15px; margin-bottom: 10px;">
+                <button type="button" class="btn btn-primary" data-toggle="modal" id="openModalButton" data-target="#addIPModal" style="margin-bottom: 10px;">Neue IP</button>
+            </form>
+        </div>
+
+       
+
+        
+
+        <!-- Modal begins here -->
             <div class="modal fade" id="addIPModal" tabindex="-1" role="dialog" aria-labelledby="addIPLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -149,10 +158,9 @@ $string = $ip->returnTable();
                     </div> <!-- Modal Content -->
                 </div> <!-- Modal-Dialog -->
             </div> <!-- Modal -->
-        </div> <!-- col-xs-6 -->
-
-
-            <table class="table sortable table-responsive tablesorter ipTable" id="myTable" style="margin-top: 100px;">
+            
+            <div class="table-responsive">
+            <table class="table sortable table-responsive tablesorter ipTable" id="myTable" style="margin-top: 25px;">
                 <thead>
                     <tr>
                         <th>IP</th>
@@ -163,10 +171,10 @@ $string = $ip->returnTable();
                         <th>Miners</th>
                         <th>Clan</th>
                         <th>Added By</th>
-                        <th>Report</th>
+                        <th class='sorter-false'>Report</th>
                         <?php
                         if($_SESSION["Role"] == "Moderator" || $_SESSION["Role"] == "Admin"){
-                            echo "<th>Edit</th>";
+                            echo "<th class='sorter-false'>Edit</th>";
                         }
                         ?>
                     <tr>
@@ -177,12 +185,10 @@ $string = $ip->returnTable();
                     ?>
                 </tbody>
             </table>
+            </div>
     <?php
     }
     ?>
-
-
-    </div> <!-- /Column -->
 
 </div> <!-- /Container-->
 
@@ -289,7 +295,7 @@ $string = $ip->returnTable();
 <script>
     $(document).ready(function() 
         { 
-            $("#myTable").tablesorter(); 
+            $("#myTable").tablesorter({ widthFixed: true }); 
             $(function(){
              $('[data-toggle="tooltip"]').tooltip()
          	});
