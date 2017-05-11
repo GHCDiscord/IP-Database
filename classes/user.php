@@ -258,7 +258,7 @@ class USER
         $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID =:id ORDER BY `ID` ASC");
         $stmt->execute(array(":id"=>$id));
         $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
-        $_SESSION['Role'] = $userRow['Role'];
+        
        if($userRow['Role'] == $role){
             return true;
         }
@@ -309,7 +309,7 @@ $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
       $stmt->execute(array(":id"=>$id));
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
-      $_SESSION['Rep'] = $row['Reputation'];
+      
       if($row["Reputation"] == 0 || $row["Reputation"] == NULL){
         return true;
       } else {
@@ -322,18 +322,21 @@ $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
         $stmt = $this->db->prepare('SELECT * FROM `Users` WHERE 1');
         
         $stmt->execute();
+        $today = date("Y-m-d");
+
+
 
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            if ($this->isExpired($row["ID"])){
+            if ($row['ExpireDate'] < $today ){
               $expired = "Abgelaufen";
             } else {
               $expired = "Gültig";
             }
-            if($this->hasRole($row["ID"], "Admin")){
+            if($row["Role"] == "Admin"){
               $expired = "Admin";
             }
-            if($this->hasRole($row["ID"], "Moderator")){
+            if($row["Role"] == "Moderator"){
               $expired = "Moderator";
             }
 
