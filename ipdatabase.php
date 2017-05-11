@@ -173,7 +173,7 @@ $string = $ip->returnTable();
                         <th class="col-md-2" style="padding-right: 20px;">Added By</th>
                         <th class='sorter-false col-md-1'>Report</th>
                         <?php
-                        if($user->hasRole($_SESSION["User"], "Moderator") || $user->hasRole($_SESSION["User"], "Admin")){
+                        if($_SESSION["Role"] == "Moderator" || $_SESSION["Role"] == "Admin"){
                             echo "<th class='sorter-false'>Edit</th>";
                         }
                         ?>
