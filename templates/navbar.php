@@ -38,6 +38,7 @@
         if($user->is_loggedin()){
           $userid = $_SESSION["User"];
           if($user->hasRole($userid, "Admin")){
+            //echo "<li id='botCI.php' class=''><a href='botCI.php'><i class='fa fa-commenting-o fa-lg' aria-hidden='true'></i>&nbsp; BotCI</a></li>";
             echo "<li id='admin.php' class=''><a href='admin.php'><i class='fa fa-pencil-square-o fa-lg' aria-hidden='true'></i>&nbsp; Admin</a></li>";
           }
           
