@@ -14,7 +14,7 @@ try
 }
 catch(PDOException $e)
 {
-
+	echo "dbconfig.php: Connection to database failed: " . $e->getMessage();
 }
 
 
