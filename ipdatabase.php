@@ -163,17 +163,17 @@ $string = $ip->returnTable();
             <table class="table sortable table-responsive tablesorter ipTable" id="myTable" style="margin-top: 25px;">
                 <thead>
                     <tr>
-                        <th>IP</th>
-                        <th>Name</th>
-                        <th>Reputation</th>
-                        <th>Last Updated</th>
-                        <th>Description</th>
-                        <th>Miners</th>
-                        <th>Clan</th>
-                        <th>Added By</th>
-                        <th class='sorter-false'>Report</th>
+                        <th class="col-md-1" style="padding-right: 20px;">IP</th>
+                        <th class="col-md-2" style="padding-right: 20px;">Name</th>
+                        <th class="col-md-1" style="padding-right: 20px;">Reputation</th>
+                        <th class="col-md-1" style="padding-right: 20px;">Updated</th>
+                        <th class="col-md-2" style="padding-right: 20px;">Description</th>
+                        <th class="col-md-1" style="padding-right: 20px;">Miners</th>
+                        <th class="col-md-1" style="padding-right: 20px;">Clan</th>
+                        <th class="col-md-2" style="padding-right: 20px;">Added By</th>
+                        <th class='sorter-false col-md-1'>Report</th>
                         <?php
-                        if($_SESSION["Role"] == "Moderator" || $_SESSION["Role"] == "Admin"){
+                        if($user->hasRole($_SESSION["User"], "Moderator") || $user->hasRole($_SESSION["User"], "Admin")){
                             echo "<th class='sorter-false'>Edit</th>";
                         }
                         ?>
