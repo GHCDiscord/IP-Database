@@ -93,9 +93,10 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
             if($row["Reputation"] < $_SESSION["Rep"] * 0.25 && !$_SESSION["Rep"] == 0){
                 $class = "warning";
             }
-             
-            if($$row["CountIPRepo"] >= 5){
-               $class = "";
+            
+            //Einfärben der gemeldeten IPs
+            if($row["CountIPRepo"] >= 1){
+               $class = "danger";
           }
             $nameCount = "";
             if($row["CountName"] > 1){
