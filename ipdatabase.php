@@ -1,6 +1,6 @@
 <?php
 
-$start = microtime(true);
+/*$start = microtime(true);*/
 
 require_once 'dbconfig.php';
 
@@ -353,7 +353,7 @@ include "templates/footer.php";
 
 
 
-$end = microtime(true);
+/*$end = microtime(true);
 $creationtime = ($end - $start);
-printf("Page created in %.6f seconds.", $creationtime);
+printf("Page created in %.6f seconds.", $creationtime);*/
 ?>

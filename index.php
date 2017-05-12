@@ -1,8 +1,11 @@
 <?php
+//error_reporting(E_ALL);
+
 require_once 'dbconfig.php';
 
 include "templates/header.php";
 include "templates/navbar.php";
+
 ?>
     <div class="container">
         <div id="welcome" style="display: flex; margin-top: 5%;"></div>
