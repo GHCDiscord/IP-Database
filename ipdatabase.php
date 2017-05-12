@@ -63,26 +63,23 @@ function message_error($id, $idDiv, $message){
 }
 if($loggedin){
 $string = $ip->returnTable();
-}
 ?>
 <div class="container">
     <?php
 
-    if(!$loggedin){
-        echo $user->returnNotLoggedIn();
-    } else {
+ 
             if(isset($_GET["editsuccess"])){
 
             echo '<div class="alert alert-success" role="alert">
                         <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
                     </div>';
             }
-                        if($user->reputationIsNull($_SESSION["User"])){
+                        if($_SESSION["Rep"] ==  0){
             echo    '<div class="alert alert-warning alert-dismissible" role="alert">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Gib deine Reputation in den Einstellungen an, damit wir für dich relevante IPs anzeigen können!</p>
                     </div>';
-            } 
+          }
     ?>
             <script type="text/javascript">
 				$('#addIPModal').on('shown.bs.modal', function () {
@@ -186,9 +183,7 @@ $string = $ip->returnTable();
                 </tbody>
             </table>
             </div>
-    <?php
-    }
-    ?>
+ 
 
 </div> <!-- /Container-->
 
@@ -349,6 +344,15 @@ function searchTable(){
 
 </script>
 <?php
+}else{
+	    
+        echo $user->returnNotLoggedIn();
+    } 
+
+
+
+
+
 include "templates/footer.php";
 
 
