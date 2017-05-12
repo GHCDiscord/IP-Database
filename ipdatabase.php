@@ -33,7 +33,7 @@ if(isset($_GET["addIP"])){
         message_error("nameMessage", "nameDiv", "<p>Bitte einen Namen angeben!</p>");
     }
 
-    if(!$error){
+    if(!$error&&$loggedin){
         $ipavailable = $ip->ipAvailable($ipstring);
         if(!$ipavailable) {
         $error = true;
@@ -41,7 +41,7 @@ if(isset($_GET["addIP"])){
         }
     }
 
-    if(!$error){
+    if(!$error&&$loggedin){
         $success = $ip->add($ipstring, $name, $reputation, $description, $miners, $_SESSION["User"], $clan);
         if($success) {
         } else {
