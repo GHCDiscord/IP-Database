@@ -49,12 +49,12 @@ include "templates/navbar.php";
     <form class="form-horizontal" action="usersettings.php<?php echo "?id={$editid}" ?>" method="post">
         <div class="form-group">
             <label for="inputRep" class="col-sm-2 control-label">Reputation</label>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <input type="number" name="rep" class="form-control" id="inputRep" <?php echo 'value="' . $user->getData("Reputation", $editid) . '"'; ?> placeholder="0">
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+            <div class="col-sm-offset-2 col-sm-8">
                 <button type="submit" name="edituser" class="btn btn-success">Update</button>
             </div>
         </div>
@@ -64,24 +64,24 @@ include "templates/navbar.php";
     <form class="form-horizontal" action="usersettings.php<?php echo "?id={$editid}" ?>" method="post">
         <div class="form-group">
             <label for="oldPasswordInput" class="col-sm-2 control-label">Altes Passwort</label>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <input type="password" name="oldPassword" class="form-control" id="oldPasswordInput" placeholder="Dein altes Passwort">
             </div>
         </div>
         <div class="form-group">
             <label for="newPasswordInput" class="col-sm-2 control-label">Neues Passwort</label>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <input type="password" name="newPassword" class="form-control" id="newPasswordInput" placeholder="Dein neues Passwort">
             </div>
         </div>
         <div class="form-group">
             <label for="repeatNewPasswordInput" class="col-sm-2 control-label">Neues Passwort wiederholen</label>
-            <div class="col-sm-10">
+            <div class="col-sm-8">
                 <input type="password" name="repeatNewPassword" class="form-control" id="repeatNewPasswordInput" placeholder="Wiederhole dein neues Passwort">
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+            <div class="col-sm-offset-2 col-sm-8">
                 <button type="submit" name="editpassword" class="btn btn-success">Passwort ändern</button>
             </div>
         </div>
@@ -93,10 +93,14 @@ include "templates/navbar.php";
     	<div class="form-group">
     		<label for="inputToken" class="col-sm-2 control-label">Token</label>
     		<div class="col-sm-8">
-    		<input type="text" class="form-control" id="inputToken" disabled value="<?php echo $user->getToken($editid); ?>" >
+    		    <input type="text" class="form-control" id="inputToken" disabled value="<?php echo $user->getToken($editid); ?>" >
     		</div>
-    		<button type="submit" name="newToken" value="newToken" class="btn btn-info col-sm-2">Neuer Token</button>
     	</div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                <button type="submit" name="newToken" value="newToken" class="btn btn-info">Neuer Token</button>
+            </div>
+        </div>
     </form>
     <?php
     }
