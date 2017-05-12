@@ -299,6 +299,9 @@ $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
       $_SESSION['Rep'] = $row['Reputation'];
+      if($_SESSION['Rep'] == NULL){
+      	$_SESSION['Rep'] = 0;
+       }
       }
 
 
