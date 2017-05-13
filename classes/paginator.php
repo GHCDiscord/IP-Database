@@ -11,6 +11,7 @@ class Paginator {
 		public $currentPage;
 		public $total;
 		public $textNav;
+		public $maxpages;
 		private $_navigation;		
 		private $_link;
 		private $_pageNumHtml;
@@ -21,16 +22,17 @@ class Paginator {
         public function __construct()
         {
         	//set default values
-        	$this->itemsPerPage = 5;
-			$this->range        = 5;
+        	$this->itemsPerPage = 100;
+			$this->range        = 4;
 			$this->currentPage  = 1;		
 			$this->total		= 0;
-			$this->textNav 		= false;
-			$this->itemSelect   = array(5,25,50,100,'All');			
+			$this->maxpages = 0;
+			$this->textNav 		= true;
+			$this->itemSelect   = array(50,100,500,'All');			
 			//private values
 			$this->_navigation  = array(
-					'next'=>'Next',
-					'pre' =>'Pre',
+					'next'=>'-->',
+					'pre' =>'<--',
 					'ipp' =>'Item per page'
 			);			
         	$this->_link 		 = filter_var($_SERVER['PHP_SELF'], FILTER_SANITIZE_STRING);
@@ -69,7 +71,7 @@ class Paginator {
          * @param               type $parameter
          * @return              string
          */
-        public function pageNumbers()
+    public function pageNumbers()
         {
         	if(empty($this->_pageNumHtml)){
         		exit('Please call function paginate() first.');
@@ -101,32 +103,42 @@ class Paginator {
          */
         private function  _getPageNumbers()
         {
-        	$html  = '<ul>'; 
+        	$html  = '<center>';
         	//previous link button
-			if($this->textNav&&($this->currentPage>1)){
-				echo '<li><a href="'.$this->_link .'?current='.($this->currentPage-1).'"';
-				echo '>'.$this->_navigation['pre'].'</a></li>';
+			if($_GET['current'] >1){
+				
+				$html .= '<a href="'.$this->_link .'?current='.($this->currentPage-1).'&item='.($this->itemsPerPage).'"';
+				$html .= '>'.$this->_navigation['pre'].'</a>';
 			}        	
+			$this->maxpages = ceil($this->total / $this->itemsPerPage);
         	//do ranged pagination only when total pages is greater than the range
-        	if($this->total > $this->range){				
+        	if($this->maxpages > $this->range){				
 				$start = ($this->currentPage <= $this->range)?1:($this->currentPage - $this->range);
 				$end   = ($this->total - $this->currentPage >= $this->range)?($this->currentPage+$this->range): $this->total;
+				
+				echo $this->maxpages;
         	}else{
         		$start = 1;
-				$end   = $this->total;
+				$end   = $this->maxpages;
+				
         	}    
         	//loop through page numbers
         	for($i = $start; $i <= $end; $i++){
-					echo '<li><a href="'.$this->_link .'?current='.$i.'"';
-					if($i==$this->currentPage) echo "class='current'";
-					echo '>'.$i.'</a></li>';
+					$html .= '<a href="'.$this->_link .'?current='.$i.'&item='.($this->itemsPerPage).'"'; 
+					if($i==$this->currentPage){
+$x = '['; $y = ']';
+} else {
+$x = ' '; $y = ' ';
+}
+					$html .= '>'.$x.$i.$y.'</a>';
 			}        	
         	//next link button
-        	if($this->textNav&&($this->currentPage<$this->total)){
-				echo '<li><a href="'.$this->_link .'?current='.($this->currentPage+1).'"';
-				echo '>'.$this->_navigation['next'].'</a></li>';
+        	if($_GET['current']<$this->maxpages){
+				$html .= '<a href="'.$this->_link .'?current='.($this->currentPage+1).'&item='.($this->itemsPerPage).'"';
+				$html .= '>'.$this->_navigation['next'].'</a>';
+				
 			}
-        	$html .= '</ul>';
+        	$html .= '</center>';
         	return $html;
         }
 		
@@ -140,9 +152,16 @@ class Paginator {
         private function  _getItemSelect()
         {
         	$items = '';
-   			$ippArray = $this->itemSelect;   			
+               
+   			$ippArray = $this->itemSelect;   	
+              $ippArray[3] = $this->total;
+               
    			foreach($ippArray as $ippOpt){   
+   	if($ippOpt == $this->total){
+   	$items .= ($ippOpt == $this->itemsPerPage) ? "<option selected value=\"$ippOpt\">All</option>\n":"<option value=\"$ippOpt\">All</option>\n";
+   }else{
 		    	$items .= ($ippOpt == $this->itemsPerPage) ? "<option selected value=\"$ippOpt\">$ippOpt</option>\n":"<option value=\"$ippOpt\">$ippOpt</option>\n";
+		}
    			}   			
 	    	return "<span class=\"paginate\">".$this->_navigation['ipp']."</span>
 	    	<select class=\"paginate\" onchange=\"window.location='$this->_link?current=1&item='+this[this.selectedIndex].value;return false\">$items</select>\n";   	
