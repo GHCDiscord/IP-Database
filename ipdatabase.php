@@ -16,6 +16,17 @@ if($user->is_loggedin())
 } else {
     $loggedin = false;
 }
+if(isset($_GET['current'])){
+	$_SESSION['curpage'] = $_GET['current'];
+	
+	}
+	
+if(isset($_GET['item'])){
+	$_SESSION['curitem'] = $_GET['item'];
+	
+	}
+
+
 
 if(isset($_GET["addIP"])){
     $error = false;
