@@ -10,6 +10,7 @@ include "templates/navbar.php";
 if($user->is_loggedin())
 {
     $loggedin = true;
+    
     $user->GetUserRole($_SESSION["User"]);
                 $user->GetUserRep($_SESSION["User"]);
 } else {
@@ -62,7 +63,15 @@ function message_error($id, $idDiv, $message){
     ";
 }
 if($loggedin){
-$string = $ip->returnTable();
+$totalRecords = $ip->getTableCount();
+$paginator = new Paginator();
+$paginator->total = $totalRecords;
+$paginator->paginate();
+	
+$anfang = intval(($paginator->currentPage-1)*$paginator->itemsPerPage);
+$limit = intval($paginator->itemsPerPage) ;
+
+$string = $ip->returnIPTable($anfang, $limit);
 ?>
 <div class="container">
     <?php
@@ -155,8 +164,14 @@ $string = $ip->returnTable();
                     </div> <!-- Modal Content -->
                 </div> <!-- Modal-Dialog -->
             </div> <!-- Modal -->
-            
+            	<?php
+            echo "<center>";
+            echo $paginator->pageNumbers();
+            echo $paginator->itemsPerPage()."</center>";
+                
+            ?>
             <div class="table-responsive">
+            
             <table class="table sortable table-responsive tablesorter ipTable" id="myTable" style="margin-top: 25px;">
                 <thead>
                     <tr>
