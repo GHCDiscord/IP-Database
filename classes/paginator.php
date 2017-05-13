@@ -53,10 +53,16 @@ class Paginator {
 			if(isset($_GET['current'])){
 				$this->currentPage  = $_GET['current'];		
 			}			
+			if(isset($_SESSION['curpage'])){
+				$this->currentPage = $_SESSION['curpage'];
+			}
 			//get item per page
 			if(isset($_GET['item'])){
 				$this->itemsPerPage = $_GET['item'];
 			}			
+			if(isset($_SESSION['curitem'])){
+				$this->itemsPerPage = $_SESSION['curitem'];
+			}
 			//get page numbers
 			$this->_pageNumHtml = $this->_getPageNumbers();			
 			//get item per page select box
@@ -103,9 +109,10 @@ class Paginator {
          */
         private function  _getPageNumbers()
         {
-        	$html  = '<center>';
+        	
+            $html  = '<center>';
         	//previous link button
-			if($_GET['current'] >1){
+			if($this->currentPage >1){
 				
 				$html .= '<a href="'.$this->_link .'?current='.($this->currentPage-1).'&item='.($this->itemsPerPage).'"';
 				$html .= '>'.$this->_navigation['pre'].'</a>';
@@ -133,7 +140,7 @@ $x = ' '; $y = ' ';
 					$html .= '>'.$x.$i.$y.'</a>';
 			}        	
         	//next link button
-        	if($_GET['current']<$this->maxpages){
+        	if($this->currentPage<$this->maxpages){
 				$html .= '<a href="'.$this->_link .'?current='.($this->currentPage+1).'&item='.($this->itemsPerPage).'"';
 				$html .= '>'.$this->_navigation['next'].'</a>';
 				
