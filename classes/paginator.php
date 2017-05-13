@@ -116,7 +116,7 @@ class Paginator {
 				$start = ($this->currentPage <= $this->range)?1:($this->currentPage - $this->range);
 				$end   = ($this->total - $this->currentPage >= $this->range)?($this->currentPage+$this->range): $this->total;
 				
-				echo $this->maxpages;
+				
         	}else{
         		$start = 1;
 				$end   = $this->maxpages;
