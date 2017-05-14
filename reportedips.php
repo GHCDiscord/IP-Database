@@ -5,7 +5,7 @@ if(!$user->is_loggedin()){
     $user->redirect("index.php");
 }
 
-if(!$user->hasRole($_SESSION["User"], "Admin")){
+if(!$_SESSION["Role"] == "Admin" || !$_SESSION['Role'] == "Moderator"){
     $user->redirect("index.php");
 }
 
@@ -16,7 +16,7 @@ if(isset($_GET["error"])){
 include "templates/header.php";
 include "templates/navbar.php";
 
-$string = $user->returnTable();
+$string = $reported->returnReportTable();
 ?>
 
 <div class="container">
@@ -38,16 +38,21 @@ $string = $user->returnTable();
             </form>
         </div>
     <div class="col-md-12">
-        <table class="table sortable" id="AdminUserTable">
+        <table class="table sortable" id="ReporterTable">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>ReportID</th>
+                    <th>Melder</th>
+                    <th>IP</th>
                     <th>Name</th>
-                    <th>Rolle</th>
-                    <th>Last Login (Y-M-D H:M:S)</th>
-                    <th>Discord</th>
-                    <th>Gültigkeit</th>
+                    <th>Reputation</th>
+                    <th>Updated_By</th>
+                    <th>Clan</th>
+                    <th>Miners</th>
+                    <th>Description</th>
+                    <th>Last_Updated</th>
                     <th>Edit</th>
+                    <th>Löschen</th>
                 <tr>
             <thead>
             <tbody id="tbody">
@@ -65,7 +70,7 @@ $string = $user->returnTable();
 <script>
     $(document).ready(function() 
         { 
-            $("#AdminUserTable").tablesorter(); 
+            $("#ReporterTable").tablesorter({ widthFixed: true, widgets: ["saveSort"]}); 
         } 
     );     
 </script>
