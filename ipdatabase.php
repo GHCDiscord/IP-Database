@@ -320,7 +320,8 @@ $string = $ip->returnIPTable($anfang, $limit);
 <script>
     $(document).ready(function() 
         { 
-            $("#myTable").tablesorter({ widthFixed: true }); 
+            $("#myTable").tablesorter({ widthFixed: true, widgets: ["saveSort"]
+ }); 
             $(function(){
              $('[data-toggle="tooltip"]').tooltip()
          	});
