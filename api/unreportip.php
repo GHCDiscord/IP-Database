@@ -6,13 +6,23 @@ if(!$user->is_loggedin()){
 }
 
 $id = $_GET["id"];
-if($user->hasReported($_SESSION["User"], $id)){
-	if($ip->unreport($id, $_SESSION["User"])){
+if(isset($_GET["uid"])){
+	$uid = $_GET["uid"];
+	$nichtajax = true;
+}else{
+	$uid = $_SESSION["User"];
+}
+if($user->hasReported($uid, $id)){
+	if($ip->unreport($id, $uid)){
 		echo "true";
+		$success = true;
 	} else {
 		echo "false";
 	}
 } else {
 	echo "false";
 }
-
+if($nichtajax && $success){
+	$user->redirect("../reportedips.php");
+	}
+	
