@@ -54,17 +54,28 @@ class IP {
             return $stmt->rowCount();
     }
     
-    public function returnIPTable($anfang, $limit){
-        $stmt = $this->db->prepare('SELECT * FROM (SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo` FROM `HackersIP` 
+    public function returnIPTable($anfang, $limit, $fav){
+      
+
+  if($fav == 1){
+  $stmt = $this->db->prepare('SELECT * FROM (SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo`, COALESCE(`UsersIPFav`.`UserIPFav`, 0) AS `UserIPFav` FROM `HackersIP` 
 LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
 JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
 JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
 LEFT JOIN (SELECT COUNT(1) AS `CountIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` GROUP BY `IPUserReport`.`IPID`) AS `CountsIPRepo` ON `CountsIPRepo`.`IPID` = `HackersIP`.`ID`
 LEFT JOIN (SELECT COUNT(1) AS `UserIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` WHERE `IPUserReport`.`UserID` = :uid GROUP BY `IPUserReport`.`IPID`) AS `UsersIPRepo` ON `UsersIPRepo`.`IPID` = `HackersIP`.`ID`
+LEFT JOIN (SELECT COUNT(1) AS `UserIPFav`, `IPUserFav`.`IPID` FROM `IPUserFav` WHERE `IPUserFav`.`UserID` = :uid GROUP BY `IPUserFav`.`IPID`) AS `UsersIPFav` ON `UsersIPFav`.`IPID` = `HackersIP`.`ID`
+WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_Login` IS NULL) AS T WHERE `UserIPFav` = 1 ORDER BY `T`.`Name` ASC LIMIT :a, :limit ');
+}else{
+$stmt = $this->db->prepare('SELECT * FROM (SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo`, COALESCE(`UsersIPFav`.`UserIPFav`, 0) AS `UserIPFav` FROM `HackersIP` 
+LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
+JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
+JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
+LEFT JOIN (SELECT COUNT(1) AS `CountIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` GROUP BY `IPUserReport`.`IPID`) AS `CountsIPRepo` ON `CountsIPRepo`.`IPID` = `HackersIP`.`ID`
+LEFT JOIN (SELECT COUNT(1) AS `UserIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` WHERE `IPUserReport`.`UserID` = :uid GROUP BY `IPUserReport`.`IPID`) AS `UsersIPRepo` ON `UsersIPRepo`.`IPID` = `HackersIP`.`ID`
+LEFT JOIN (SELECT COUNT(1) AS `UserIPFav`, `IPUserFav`.`IPID` FROM `IPUserFav` WHERE `IPUserFav`.`UserID` = :uid GROUP BY `IPUserFav`.`IPID`) AS `UsersIPFav` ON `UsersIPFav`.`IPID` = `HackersIP`.`ID`
 WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_Login` IS NULL) AS T ORDER BY `T`.`Name` ASC LIMIT :a, :limit ');
-
-
-
+}
 
 
 
@@ -75,7 +86,8 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
   $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
  $stmt->bindParam(':uid', $_SESSION['User']);
         $stmt->execute();
-        
+     /*   $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        var_dump($row); */
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
           
@@ -91,6 +103,20 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
                 $color = "btn-warning";
                 $title = "Report";
             } 
+            if($row["UserIPFav"] > 0){
+                $onclick1 = "unfav";
+                $symbol1 = "glyphicon glyphicon-star";
+                $color1 = "btn-success";
+                $title1 = "Unfavourite";
+            } else {
+                $onclick1 = "fav";
+                $symbol1 = "glyphicon glyphicon-star-empty";
+                $color1 = "btn-warning";
+                $title1 = "Favourite";
+            } 
+            
+            
+            
             $class = "";
             // Reputation größer als 75% der eigenen
             if($row["Reputation"] > $_SESSION["Rep"] * 0.75){
@@ -104,7 +130,7 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
             }
             
             //Einfärben der gemeldeten IPs
-            if($row["CountIPRepo"] >= 1){
+            if($row["CountIPRepo"] >= 5){
                $class = "danger";
           }
             $nameCount = "";
@@ -121,7 +147,8 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
                          "<td>" . $row['Miners'] . "</td>" .
                          "<td>" . $row['Clan'] . "</td>" .
                          "<td>" . $row['Username'] . "</td>" . 
-                         "<td><a id='report{$row['ID']}' onclick='{$onclick}({$row['ID']})' data-placement='top' data-toggle='tooltip' title='{$title}' class='btn {$color} btn-xs'><span class='{$symbol}'></span></a>" . "</td>";
+                         "<td><a id='report{$row['ID']}' onclick='{$onclick}({$row['ID']})' data-placement='top' data-toggle='tooltip' title='{$title}' class='btn {$color} btn-xs'><span class='{$symbol}'></span></a>" . "</td>" .
+                         "<td><a id='fav{$row['ID']}' onclick='{$onclick1}({$row['ID']})' data-placement='top' data-toggle='tooltip' title='{$title1}' class='btn {$color1} btn-xs'><span class='{$symbol1}'></span></a>" . "</td>";
                          if($_SESSION["Role"] == "Admin" || $_SESSION["Role"] == "Moderator"){
                              $rowString .= "<td><a href='editip.php?id={$row["ID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-success btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>";
                          }
@@ -282,10 +309,26 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
             $success = $stmt->execute();
             return $success;
     }
+    public function fav($ipid, $userid){
+            $stmt = $this->db->prepare('INSERT INTO `IPUserFav`(`UserID`,`IPID`) VALUES (:user, :ip)');
+            $stmt->bindParam(':user', $userid);
+            $stmt->bindParam(':ip', $ipid);
+
+            $success = $stmt->execute();
+            return $success;
+    }
 
     // Reports an IP
     public function unreport($ipid, $userid){
             $stmt = $this->db->prepare('DELETE FROM `IPUserReport` WHERE `IPID`=:ipid AND `UserID`=:user');
+            $stmt->bindParam(':user', $userid);
+            $stmt->bindParam(':ipid', $ipid);
+
+            $success = $stmt->execute();
+            return $success;
+    }
+    public function unfav($ipid, $userid){
+            $stmt = $this->db->prepare('DELETE FROM `IPUserFav` WHERE `IPID`=:ipid AND `UserID`=:user');
             $stmt->bindParam(':user', $userid);
             $stmt->bindParam(':ipid', $ipid);
 

@@ -33,7 +33,7 @@ JOIN `Users` ON `IPUserReport`.`UserID` = `Users`.`ID`');
                 <td>" . $row['Last_Updated'] . "</td>
                
                 <td> <a href='editip.php?id={$row["IPID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-warning btn-xs' ><span class='glyphicon glyphicon-pencil'></span></button></a></td>
-                <td> <a href='api/unreportip.php?id={$row["IPID"]}&uid={$row["UserID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-warning btn-xs' ><span class='glyphicon glyphicon-alert'></span></button></a></td>
+                <td> <a href='api/unreportip.php?id={$row["IPID"]}&uid={$row["UserID"]}' data-placement='top' data-toggle='tooltip' title='Edit'><button class='btn btn-warning btn-xs' ><span class='glyphicon glyphicon-trash'></span></button></a></td>
                 </tr>";
             $returnString .= $rowString;
         }
