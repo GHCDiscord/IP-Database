@@ -68,6 +68,9 @@ function message_error($id, $idDiv, $message){
         $( document ).ready(function() {
             document.getElementById('$id').innerHTML = '$message';
             document.getElementById('$idDiv').className = 'form-group has-error';
+                
+         $('#addIPModal').modal('show');
+     
         });
 
     </script>
@@ -101,12 +104,13 @@ $string = $ip->returnIPTable($anfang, $limit);
                     </div>';
           }
     ?>
-            <script type="text/javascript">
+     
+          <script type="text/javascript">
 				$('#addIPModal').on('shown.bs.modal', function () {
 				  getElementById("inputIP").focus()
 				  return false
 				})
-            </script>     
+            </script>
 
          <div id="tableInfo" style="margin-top: 15px;">
             <h4>Um die Tabelle nach mehreren Spalten gleichzeitig zu sortieren, halte 'Shift' und wähle die anderen Spalten aus.</h4>
@@ -322,6 +326,10 @@ $string = $ip->returnIPTable($anfang, $limit);
          	});
         } 
     );     
+    
+    
+ 
+
 </script>
 <script>
 
