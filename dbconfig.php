@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$DB_host = "";
-$DB_user = "";
+$DB_host = "localhost";
+$DB_user = "root";
 $DB_pass = "";
-$DB_name = "";
+$DB_name = "ghc";
 $charset = "utf8";
 
 try
@@ -20,6 +20,7 @@ catch(PDOException $e)
 
 include_once 'classes/user.php';
 include_once 'classes/ip.php';
+include_once 'classes/paginator.php';
 $user = new USER($DB_con);
 $ip = new IP($DB_con);
 
