@@ -50,8 +50,9 @@ include "templates/navbar.php";
             <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
         </div>';
     }
+    $repanzahl = $ip->reportCount($editid);
     ?>
-    <p>Diese IP wurde <?php echo $ip->reportCount($editid); ?> mal gemeldet!</p>
+    <p>Diese IP wurde <?php echo $repanzahl; ?> mal gemeldet!</p>
     <form class="form-horizontal" action="editip.php<?php echo "?id={$editid}" ?>" method="post">
         
         <div class="form-group">
@@ -97,7 +98,9 @@ include "templates/navbar.php";
             </div>
         </div>
     </form>
-    <h3>Diese IP wurde gemeldet von:</h3>
-    <?php echo $ip->listReportNames($editid);?>
+    <?php
+    if(!$repanzahl == 0){
+    echo "<h3>Diese IP wurde gemeldet von:</h3>";
+    echo $ip->listReportNames($editid);}?>
 </div>
 <?php include "templates/footer.php";?>
