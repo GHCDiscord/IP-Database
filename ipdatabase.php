@@ -26,7 +26,13 @@ if(isset($_GET['item'])){
 	
 	}
 
-
+if(isset($_GET['fav'])){
+	$_SESSION['fav'] = $_GET['fav'];
+}else{
+	$_SESSION['fav'] = 0;
+}
+		
+	
 
 if(isset($_GET["addIP"])){
     $error = false;
@@ -85,7 +91,7 @@ $paginator->paginate();
 $anfang = intval(($paginator->currentPage-1)*$paginator->itemsPerPage);
 $limit = intval($paginator->itemsPerPage) ;
 
-$string = $ip->returnIPTable($anfang, $limit);
+$string = $ip->returnIPTable($anfang, $limit, $_SESSION['fav']);
 ?>
 <div class="container">
     <?php
@@ -180,10 +186,11 @@ $string = $ip->returnIPTable($anfang, $limit);
                 </div> <!-- Modal-Dialog -->
             </div> <!-- Modal -->
             	<?php
+            if($_SESSION['fav'] == 0){
             echo "<center>";
             echo $paginator->pageNumbers();
             echo $paginator->itemsPerPage()."</center>";
-                
+             }  
             ?>
             <div class="table-responsive">
             
@@ -199,11 +206,13 @@ $string = $ip->returnIPTable($anfang, $limit);
                         <th class="col-md-1" style="padding-right: 20px;">Clan</th>
                         <th class="col-md-2" style="padding-right: 20px;">Added By</th>
                         <th class='sorter-false col-md-1'>Report</th>
+                        <th class='sorter-false col-md-1'>Fav</th>
                         <?php
                         if($_SESSION["Role"] == "Moderator" || $_SESSION["Role"] == "Admin"){
                             echo "<th class='sorter-false'>Edit</th>";
                         }
                         ?>
+                        
                     <tr>
                 <thead>
                 <tbody id="tbody">
@@ -290,7 +299,7 @@ $string = $ip->returnIPTable($anfang, $limit);
 </script>
 
 <script type="text/javascript">
-    function unreport(id){
+    function fav(id){
             if(window.XMLHttpRequest){
                 xmlhttp = new XMLHttpRequest();
             }else {
@@ -298,10 +307,31 @@ $string = $ip->returnIPTable($anfang, $limit);
             }
             xmlhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200){
-                document.getElementById("report" + id).className += " disabled"
+                document.getElementById("fav" + id).className += " disabled"
             }
         }; // OnReadyStateChange
-        xmlhttp.open("GET","api/unreportip.php?id="+id,true);
+        xmlhttp.open("GET","api/favip.php?id="+id,true);
+        xmlhttp.send();
+        }
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    function unfab(id){
+            if(window.XMLHttpRequest){
+                xmlhttp = new XMLHttpRequest();
+            }else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200){
+                document.getElementById("fab" + id).className += " disabled"
+            }
+        }; // OnReadyStateChange
+        xmlhttp.open("GET","api/unfavip.php?id="+id,true);
         xmlhttp.send();
         }
 </script>
