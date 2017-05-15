@@ -31,7 +31,7 @@
       <ul class="nav navbar-nav">
         <!--<li><a href="index.php">Home</a></li>-->
         <li id='ipdatabase.php?fav=0' class=''><a href="ipdatabase.php?fav=0"><i class='fa fa-laptop fa-lg' aria-hidden='true'></i>&nbsp; IPs</a></li>
-        <li id='ipdatabase.php?fav=1' class=''><a href="ipdatabase.php?fav=1"><i class='fa fa-star fa-lg' aria-hidden='true'></i>&nbsp; Favouriten</a></li>
+        <li id='ipdatabase.php?fav=1' class=''><a href="ipdatabase.php?fav=1"><i class='fa fa-star fa-lg' aria-hidden='true'></i>&nbsp; Favoriten</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
