@@ -308,7 +308,7 @@ class USER
 
     
 public function GetUserRep($id){
-$stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
+$stmt = $this->db->prepare("SELECT `Reputation` FROM `Users` WHERE `ID`=:id");
       $stmt->execute(array(":id"=>$id));
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
