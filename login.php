@@ -21,7 +21,9 @@ if(isset($_GET["login"])){
             if($user->login($uname, $password)){
             	$user->GetUserRole($userid, $userid);
                 $user->GetUserRep($userid);
-                $user->redirect("ipdatabase.php");
+                $user->GetUserFav($userid);
+                $weiterleitung = "ipdatabase.php?fav=".$_SESSION['fav'];
+                $user->redirect($weiterleitung);
             } else {
                 $error = true;
             }

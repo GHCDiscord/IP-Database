@@ -186,14 +186,16 @@ $string = $ip->returnIPTable($anfang, $limit, $_SESSION['fav']);
                 </div> <!-- Modal-Dialog -->
             </div> <!-- Modal -->
             	<?php
-            if($_SESSION['fav'] == 0){
+           // if($_SESSION['fav'] == 0){
             echo "<center>";
             echo $paginator->pageNumbers();
             echo $paginator->itemsPerPage()."</center>";
-             }  
+        //     }  
             ?>
             <div class="table-responsive">
-            
+            	<center>
+          <?php  if($_SESSION['fav'] == 1){ echo "Favoriten";}else{echo "IP's";} ?> 
+          	  </center>
             <table class="table sortable table-responsive tablesorter ipTable" id="myTable" style="margin-top: 25px;">
                 <thead>
                     <tr>
