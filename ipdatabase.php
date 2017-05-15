@@ -10,11 +10,29 @@ include "templates/navbar.php";
 if($user->is_loggedin())
 {
     $loggedin = true;
+    
     $user->GetUserRole($_SESSION["User"]);
                 $user->GetUserRep($_SESSION["User"]);
 } else {
     $loggedin = false;
 }
+if(isset($_GET['current'])){
+	$_SESSION['curpage'] = $_GET['current'];
+	
+	}
+	
+if(isset($_GET['item'])){
+	$_SESSION['curitem'] = $_GET['item'];
+	
+	}
+
+if(isset($_GET['fav'])){
+	$_SESSION['fav'] = $_GET['fav'];
+}else{
+	$_SESSION['fav'] = 0;
+}
+		
+	
 
 if(isset($_GET["addIP"])){
     $error = false;
@@ -33,7 +51,7 @@ if(isset($_GET["addIP"])){
         message_error("nameMessage", "nameDiv", "<p>Bitte einen Namen angeben!</p>");
     }
 
-    if(!$error){
+    if(!$error&&$loggedin){
         $ipavailable = $ip->ipAvailable($ipstring);
         if(!$ipavailable) {
         $error = true;
@@ -41,7 +59,7 @@ if(isset($_GET["addIP"])){
         }
     }
 
-    if(!$error){
+    if(!$error&&$loggedin){
         $success = $ip->add($ipstring, $name, $reputation, $description, $miners, $_SESSION["User"], $clan);
         if($success) {
         } else {
@@ -56,40 +74,49 @@ function message_error($id, $idDiv, $message){
         $( document ).ready(function() {
             document.getElementById('$id').innerHTML = '$message';
             document.getElementById('$idDiv').className = 'form-group has-error';
+                
+         $('#addIPModal').modal('show');
+     
         });
 
     </script>
     ";
 }
 if($loggedin){
-$string = $ip->returnTable();
-}
+$totalRecords = $ip->getTableCount();
+$paginator = new Paginator();
+$paginator->total = $totalRecords;
+$paginator->paginate();
+	
+$anfang = intval(($paginator->currentPage-1)*$paginator->itemsPerPage);
+$limit = intval($paginator->itemsPerPage) ;
+
+$string = $ip->returnIPTable($anfang, $limit, $_SESSION['fav']);
 ?>
 <div class="container">
     <?php
 
-    if(!$loggedin){
-        echo $user->returnNotLoggedIn();
-    } else {
+ 
             if(isset($_GET["editsuccess"])){
 
             echo '<div class="alert alert-success" role="alert">
                         <a href="#" class="alert-link">Daten erfolgreich bearbeitet!</a>
                     </div>';
             }
-                        if($user->reputationIsNull($_SESSION["User"])){
+                        if($_SESSION["Rep"] ==  0){
             echo    '<div class="alert alert-warning alert-dismissible" role="alert">
                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                       <p>Gib deine Reputation in den Einstellungen an, damit wir für dich relevante IPs anzeigen können!</p>
                     </div>';
-            } 
+          }
     ?>
-            <script type="text/javascript">
+     
+          <script type="text/javascript">
 				$('#addIPModal').on('shown.bs.modal', function () {
 				  getElementById("inputIP").focus()
 				  return false
 				})
-            </script>     
+            </script>
 
          <div id="tableInfo" style="margin-top: 15px;">
             <h4>Um die Tabelle nach mehreren Spalten gleichzeitig zu sortieren, halte 'Shift' und wähle die anderen Spalten aus.</h4>
@@ -158,8 +185,17 @@ $string = $ip->returnTable();
                     </div> <!-- Modal Content -->
                 </div> <!-- Modal-Dialog -->
             </div> <!-- Modal -->
-            
+            	<?php
+            if($_SESSION['fav'] == 0){
+            echo "<center>";
+            echo $paginator->pageNumbers();
+            echo $paginator->itemsPerPage()."</center>";
+            }  
+            ?>
             <div class="table-responsive">
+            	<center>
+          <?php  if($_SESSION['fav'] == 1){ echo "Favoriten";}else{echo "IP's";} ?> 
+          	  </center>
             <table class="table sortable table-responsive tablesorter ipTable" id="myTable" style="margin-top: 25px;">
                 <thead>
                     <tr>
@@ -172,11 +208,13 @@ $string = $ip->returnTable();
                         <th class="col-md-1" style="padding-right: 20px;">Clan</th>
                         <th class="col-md-2" style="padding-right: 20px;">Added By</th>
                         <th class='sorter-false col-md-1'>Report</th>
+                        <th class='sorter-false col-md-1'>Fav</th>
                         <?php
                         if($_SESSION["Role"] == "Moderator" || $_SESSION["Role"] == "Admin"){
                             echo "<th class='sorter-false'>Edit</th>";
                         }
                         ?>
+                        
                     <tr>
                 <thead>
                 <tbody id="tbody">
@@ -186,9 +224,7 @@ $string = $ip->returnTable();
                 </tbody>
             </table>
             </div>
-    <?php
-    }
-    ?>
+ 
 
 </div> <!-- /Container-->
 
@@ -265,7 +301,7 @@ $string = $ip->returnTable();
 </script>
 
 <script type="text/javascript">
-    function unreport(id){
+    function fav(id){
             if(window.XMLHttpRequest){
                 xmlhttp = new XMLHttpRequest();
             }else {
@@ -273,10 +309,31 @@ $string = $ip->returnTable();
             }
             xmlhttp.onreadystatechange = function() {
             if(this.readyState == 4 && this.status == 200){
-                document.getElementById("report" + id).className += " disabled"
+                document.getElementById("fav" + id).className += " disabled"
             }
         }; // OnReadyStateChange
-        xmlhttp.open("GET","api/unreportip.php?id="+id,true);
+        xmlhttp.open("GET","api/favip.php?id="+id,true);
+        xmlhttp.send();
+        }
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    function unfab(id){
+            if(window.XMLHttpRequest){
+                xmlhttp = new XMLHttpRequest();
+            }else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function() {
+            if(this.readyState == 4 && this.status == 200){
+                document.getElementById("fab" + id).className += " disabled"
+            }
+        }; // OnReadyStateChange
+        xmlhttp.open("GET","api/unfavip.php?id="+id,true);
         xmlhttp.send();
         }
 </script>
@@ -295,12 +352,17 @@ $string = $ip->returnTable();
 <script>
     $(document).ready(function() 
         { 
-            $("#myTable").tablesorter({ widthFixed: true }); 
+            $("#myTable").tablesorter({ widthFixed: true, widgets: ["saveSort"]
+ }); 
             $(function(){
              $('[data-toggle="tooltip"]').tooltip()
          	});
         } 
     );     
+    
+    
+ 
+
 </script>
 <script>
 
@@ -349,6 +411,15 @@ function searchTable(){
 
 </script>
 <?php
+}else{
+	    
+        echo $user->returnNotLoggedIn();
+    } 
+
+
+
+
+
 include "templates/footer.php";
 
 

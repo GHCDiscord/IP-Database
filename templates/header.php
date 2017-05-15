@@ -18,7 +18,8 @@
     <link rel="stylesheet" href="https://bootswatch.com/darkly/bootstrap.min.css" crossorigin="anonymous">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script> 
+    <script type="text/javascript" src="js/jquery.tablesorter.js"></script> 
+    <script type="text/javascript" src="js/jquery.tablesorter.widgets.js"></script> 
     <script type="text/javascript" src="js/clipboard.min.js"></script>
     <script type="text/javascript" src="js/site.js"></script>
 

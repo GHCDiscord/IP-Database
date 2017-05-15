@@ -18,6 +18,19 @@ if(isset($_POST["edituser"])){
 	$user->redirect("ipdatabase.php?editsuccess=1");
 }
 
+
+if(isset($_POST["setfav"])){
+	if(isset($_POST['fav'])){
+		$favf = 1;
+	}else{
+		$favf = 0;
+	}
+	
+ 
+	$user->setFav($editid, $favf);
+	$user->redirect("ipdatabase.php?editsuccess=1");
+}
+
 if(isset($_POST["editpassword"])){
     $error == false;
     $success == false;
@@ -56,6 +69,21 @@ include "templates/navbar.php";
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-8">
                 <button type="submit" name="edituser" class="btn btn-success">Update</button>
+            </div>
+        </div>
+    </form>
+    
+    <form class="form-horizontal" action="usersettings.php<?php echo "?id={$editid}" ?>" method="post">
+        <div class="form-group">
+            <label for="inputRep" class="col-sm-2 control-label">Favoriten zuerst anzeigen</label>
+            <div class="col-sm-8">
+              
+               <input type="checkbox" name="fav" value="true" <?php $fav=$user->getData("FavFirst", $editid);if($fav){echo 'checked="' . $fav . '"';} ?>> 	
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-8">
+                <button type="submit" name="setfav" class="btn btn-success">Update</button>
             </div>
         </div>
     </form>

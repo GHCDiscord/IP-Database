@@ -124,8 +124,8 @@ class USER
 
     //Logout User 
     public function logout(){
+        session_unset();
         session_destroy();
-        unset($_SESSION['User']);
         return true;
     }
 
@@ -252,9 +252,16 @@ class USER
         $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
         $_SESSION['Role'] = $userRow['Role'];
         }
+        
+     public function GetUserFav($id){
+        $stmt = $this->db->prepare("SELECT `FavFirst` FROM `Users` WHERE ID =:id ORDER BY `ID` ASC");
+        $stmt->execute(array(":id"=>$id));
+        $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['fav'] = $userRow['FavFirst'];
+        }
     
   
-    public function hasRole($id, $role){
+      public function hasRole($id, $role){
         $stmt = $this->db->prepare("SELECT * FROM `Users` WHERE ID =:id ORDER BY `ID` ASC");
         $stmt->execute(array(":id"=>$id));
         $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -291,6 +298,13 @@ class USER
 
         return $success;
     }
+    
+    public function setFav($id, $favf){
+        $stmt = $this->db->prepare("UPDATE `Users` SET `FavFirst`=:fav WHERE `ID`=:id");
+        $success = $stmt->execute(array(":id"=>$id, ":fav"=>$favf));
+
+        return $success;
+    }
 
     
 public function GetUserRep($id){
@@ -299,6 +313,9 @@ $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
 
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
       $_SESSION['Rep'] = $row['Reputation'];
+      if($_SESSION['Rep'] == NULL){
+      	$_SESSION['Rep'] = 0;
+       }
       }
 
 
@@ -330,17 +347,21 @@ $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             if ($row['ExpireDate'] < $today ){
               $expired = "Abgelaufen";
+              $class = "danger";
             } else {
               $expired = "Gültig";
+              $class = "info";
             }
             if($row["Role"] == "Admin"){
               $expired = "Admin";
+              $class = "";
             }
             if($row["Role"] == "Moderator"){
               $expired = "Moderator";
+              $class = "";
             }
 
-            $rowString = "<tr>
+            $rowString = "<tr class='{$class}'>
                 <td> {$row['ID']} </td>
                 <td> {$row['Username']} </td>
                 <td>" . $row['Role'] . "</td>
@@ -379,7 +400,17 @@ $stmt = $this->db->prepare("SELECT Reputation FROM `Users` WHERE `ID`=:id");
         }
         return true;
     }
+  public function hasFav($userid, $ipid){
+        $stmt = $this->db->prepare("SELECT * FROM `IPUserFav` WHERE `UserID`=:userid AND `IPID`=:ipid");
+        $stmt->execute(array(":userid"=>$userid, ":ipid"=>$ipid));
 
+        if($stmt->rowCount() > 0){
+          return true;
+        } else {
+          return false;
+        }
+        return true;
+    }
 
 }
 ?>

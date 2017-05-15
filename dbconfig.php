@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$DB_host = "";
-$DB_user = "";
+$DB_host = "localhost";
+$DB_user = "root";
 $DB_pass = "";
-$DB_name = "";
+$DB_name = "ghc";
 $charset = "utf8";
 
 try
@@ -20,9 +20,12 @@ catch(PDOException $e)
 
 include_once 'classes/user.php';
 include_once 'classes/ip.php';
+include_once 'classes/paginator.php';
+include_once 'classes/report.php';
+
 $user = new USER($DB_con);
 $ip = new IP($DB_con);
-
+$reported = new REPORTED($DB_con);
 if($user->is_loggedin()){
 	if($user->isExpired($_SESSION["User"])){
 		$user->logout();
