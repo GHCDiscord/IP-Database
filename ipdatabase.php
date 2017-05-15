@@ -186,11 +186,11 @@ $string = $ip->returnIPTable($anfang, $limit, $_SESSION['fav']);
                 </div> <!-- Modal-Dialog -->
             </div> <!-- Modal -->
             	<?php
-           // if($_SESSION['fav'] == 0){
+            if($_SESSION['fav'] == 0){
             echo "<center>";
             echo $paginator->pageNumbers();
             echo $paginator->itemsPerPage()."</center>";
-        //     }  
+            }  
             ?>
             <div class="table-responsive">
             	<center>
