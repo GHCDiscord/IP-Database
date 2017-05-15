@@ -13,7 +13,9 @@ if(isset($_GET["uid"])){
 	$uid = $_SESSION["User"];
 }
 if($user->hasReported($uid, $id)){
+	
 	if($ip->unreport($id, $uid)){
+		
 		echo "true";
 		$success = true;
 	} else {
