@@ -171,6 +171,6 @@ $x = ' '; $y = ' ';
 		}
    			}   			
 	    	return "<span class=\"paginate\">".$this->_navigation['ipp']."</span>
-	    	<select class=\"paginate\" onchange=\"window.location='$this->_link?current=1&item='+this[this.selectedIndex].value;return false\">$items</select>\n";   	
+	    	<select class=\"paginate\" onchange=\"window.location='$this->_link?current=1&item='+this[this.selectedIndex].value;return false\" style=\"color: black;\">$items</select>\n";   	
         }
 }
