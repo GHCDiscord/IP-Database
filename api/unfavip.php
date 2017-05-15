@@ -25,4 +25,3 @@ if($user->hasFav($uid, $id)){
 if($nichtajax && $success){
 	$user->redirect("../reportedips.php");
 	}
-	
