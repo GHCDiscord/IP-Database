@@ -19,6 +19,10 @@ include "templates/navbar.php";
 $string = $reported->returnReportTable();
 ?>
 
+<script>
+    document.getElementById('navReportedIPs').classList.add("active");
+</script>
+
 <div class="container">
     <div class="col-md-12">
         <?php

@@ -57,6 +57,9 @@ include "templates/header.php";
 include "templates/navbar.php";
 ?>
 
+<script>
+    document.getElementById('navUser').classList.add("active");
+</script>
 
 <div class="container">
     <form class="form-horizontal" action="usersettings.php<?php echo "?id={$editid}" ?>" method="post">
