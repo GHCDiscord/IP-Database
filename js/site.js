@@ -1,1 +1,1 @@
-document.getElementById(filename).classList.add("active");
+
