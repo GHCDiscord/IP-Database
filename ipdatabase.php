@@ -93,6 +93,9 @@ $limit = intval($paginator->itemsPerPage) ;
 
 $string = $ip->returnIPTable($anfang, $limit, $_SESSION['fav']);
 ?>
+<script>
+    document.getElementById('navIPs').classList.add("active");
+</script>
 <div class="container">
     <?php
 

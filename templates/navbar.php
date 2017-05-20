@@ -30,8 +30,8 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <!--<li><a href="index.php">Home</a></li>-->
-        <li id='ipdatabase.php?fav=0' class=''><a href="ipdatabase.php?fav=0"><i class='fa fa-laptop fa-lg' aria-hidden='true'></i>&nbsp; IPs</a></li>
-        <li id='ipdatabase.php?fav=1' class=''><a href="ipdatabase.php?fav=1"><i class='fa fa-star fa-lg' aria-hidden='true'></i>&nbsp; Favoriten</a></li>
+        <li id='navIPs' class=''><a href="ipdatabase.php?fav=0"><i class='fa fa-laptop fa-lg' aria-hidden='true'></i>&nbsp; IPs</a></li>
+        <li id='navFavouriteIPs' class=''><a href="ipdatabase.php?fav=1"><i class='fa fa-star fa-lg' aria-hidden='true'></i>&nbsp; Favoriten</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -40,16 +40,14 @@
           
           if($_SESSION['Role'] == "Admin"){
             //echo "<li id='botCI.php' class=''><a href='botCI.php'><i class='fa fa-commenting-o fa-lg' aria-hidden='true'></i>&nbsp; BotCI</a></li>";
-            echo "<li id='admin.php' class=''><a href='admin.php'><i class='fa fa-pencil-square-o fa-lg' aria-hidden='true'></i>&nbsp; Admin</a></li>";
+            echo "<li id='navAdmin' class=''><a href='admin.php'><i class='fa fa-pencil-square-o fa-lg' aria-hidden='true'></i>&nbsp; Admin</a></li>";
           }
           if($_SESSION['Role'] == "Admin" || $_SESSION['Role'] == "Moderator"){
             
-            echo "<li id='reportedips.php' class=''><a href='reportedips.php'><i class='fa fa-pencil-square-o fa-lg' aria-hidden='true'></i>&nbsp; ReportedIP's</a></li>";
+            echo "<li id='navReportedIPs' class=''><a href='reportedips.php'><i class='fa fa-pencil-square-o fa-lg' aria-hidden='true'></i>&nbsp; ReportedIP's</a></li>";
           }
-          /* Bei usersettings.php wird das mit der active class für das <li> tag nur funktionieren, wenn er auf usersettings.php ist.
-          Das ist jetzt kein Problem, da wir nur diese eine Seite in dem Dropdown haben. Wenn wir später mal mehr haben muss ich das wahrscheinlich ändern! */ 
           echo 
-          "<li class='dropdown' id='usersettings.php'>
+          "<li class='dropdown' id='navUser'>
           <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'><i class='fa fa-user-circle-o fa-lg' aria-hidden='true'></i>&nbsp; ". $user->getName($_SESSION['User']) ." &nbsp;<span class='caret'></span></a>
           <ul class='dropdown-menu'>
             <li><a href='usersettings.php'><i class='fa fa-wrench fa-fw' aria-hidden='true'></i>&nbsp; Settings</a></li>
@@ -58,7 +56,7 @@
           </ul>
           </li>";
         } else {
-          echo "<li id='login.php' class=''><a href='login.php'><i class='fa fa-sign-in fa-lg' aria-hidden='true'></i>&nbsp; Login</a></li>";
+          echo "<li id='navLogin' class=''><a href='login.php'><i class='fa fa-sign-in fa-lg' aria-hidden='true'></i>&nbsp; Login</a></li>";
         }
 
         ?>

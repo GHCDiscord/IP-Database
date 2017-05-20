@@ -18,6 +18,9 @@ include "templates/navbar.php";
 
 $string = $user->returnTable();
 ?>
+<script>
+    document.getElementById('navAdmin').classList.add("active");
+</script>
 
 <div class="container">
     <div class="col-md-12">

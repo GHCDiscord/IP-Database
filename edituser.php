@@ -39,6 +39,10 @@ include "templates/header.php";
 include "templates/navbar.php";
 ?>
 
+<script>
+    document.getElementById('navAdmin').classList.add("active");
+</script>
+
 <div class="container">
     <?php
     if(isset($success)){

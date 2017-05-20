@@ -42,6 +42,10 @@ if(isset($_POST["edituser"])){
 include "templates/header.php";
 include "templates/navbar.php";
 ?>
+<script>
+    document.getElementById('navIPs').classList.add("active");
+</script>
+
 <div class="container">
     <?php
     if(isset($success)){

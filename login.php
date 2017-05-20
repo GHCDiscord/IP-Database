@@ -36,7 +36,9 @@ if(isset($_GET["login"])){
 include 'templates/header.php';
 include "templates/navbar.php";
 ?>
-
+<script>
+    document.getElementById('navLogin').classList.add("active");
+</script>
 <div class="container">
     <div class="col-md-12">
     <?php
