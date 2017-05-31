@@ -58,19 +58,19 @@ class IP {
       
 
   if($fav == 1){
-  $stmt = $this->db->prepare('SELECT * FROM (SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo`, COALESCE(`UsersIPFav`.`UserIPFav`, 0) AS `UserIPFav` FROM `HackersIP` 
+  $stmt = $this->db->prepare('SELECT * FROM (SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, COALESCE(`CountsName`.`CountName`,0) AS `CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo`, COALESCE(`UsersIPFav`.`UserIPFav`, 0) AS `UserIPFav` FROM `HackersIP` 
 LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
 JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
-JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
+LEFT JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
 LEFT JOIN (SELECT COUNT(1) AS `CountIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` GROUP BY `IPUserReport`.`IPID`) AS `CountsIPRepo` ON `CountsIPRepo`.`IPID` = `HackersIP`.`ID`
 LEFT JOIN (SELECT COUNT(1) AS `UserIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` WHERE `IPUserReport`.`UserID` = :uid GROUP BY `IPUserReport`.`IPID`) AS `UsersIPRepo` ON `UsersIPRepo`.`IPID` = `HackersIP`.`ID`
 LEFT JOIN (SELECT COUNT(1) AS `UserIPFav`, `IPUserFav`.`IPID` FROM `IPUserFav` WHERE `IPUserFav`.`UserID` = :uid GROUP BY `IPUserFav`.`IPID`) AS `UsersIPFav` ON `UsersIPFav`.`IPID` = `HackersIP`.`ID`
 WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_Login` IS NULL) AS T WHERE `UserIPFav` = 1 ORDER BY `T`.`Name` ASC LIMIT :a, :limit ');
 }else{
-$stmt = $this->db->prepare('SELECT * FROM (SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo`, COALESCE(`UsersIPFav`.`UserIPFav`, 0) AS `UserIPFav` FROM `HackersIP` 
+$stmt = $this->db->prepare('SELECT * FROM (SELECT `HackersIP`.`ID`, `IP`, `HackersIP`.`Name`, `HackersIP`.`Reputation`, `Last_Updated`, `Description`, `Miners`, `Clan`, `Adder`.`Username`, `CountsName`.`CountName`, COALESCE(`CountsIPRepo`.`CountIPRepo`, 0) AS `CountIPRepo`, COALESCE(`UsersIPRepo`.`UserIPRepo`, 0) AS `UserIPRepo`, COALESCE(`UsersIPFav`.`UserIPFav`, 0) AS `UserIPFav` FROM `HackersIP`
 LEFT JOIN `Users` ON `HackersIP`.`Name` = `Users`.`Username` 
 JOIN `Users` AS `Adder` ON `HackersIP`.`Added_By` = `Adder`.`ID` 
-JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
+LEFT JOIN (SELECT COUNT(1) AS `CountName`, `HackersIP`.`Name` FROM `HackersIP` GROUP BY `HackersIP`.`Name`) AS `CountsName` ON `CountsName`.`Name` = `HackersIP`.`Name`
 LEFT JOIN (SELECT COUNT(1) AS `CountIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` GROUP BY `IPUserReport`.`IPID`) AS `CountsIPRepo` ON `CountsIPRepo`.`IPID` = `HackersIP`.`ID`
 LEFT JOIN (SELECT COUNT(1) AS `UserIPRepo`, `IPUserReport`.`IPID` FROM `IPUserReport` WHERE `IPUserReport`.`UserID` = :uid GROUP BY `IPUserReport`.`IPID`) AS `UsersIPRepo` ON `UsersIPRepo`.`IPID` = `HackersIP`.`ID`
 LEFT JOIN (SELECT COUNT(1) AS `UserIPFav`, `IPUserFav`.`IPID` FROM `IPUserFav` WHERE `IPUserFav`.`UserID` = :uid GROUP BY `IPUserFav`.`IPID`) AS `UsersIPFav` ON `UsersIPFav`.`IPID` = `HackersIP`.`ID`
@@ -86,8 +86,7 @@ WHERE `Users`.`Last_Login` < DATE_SUB( now(), INTERVAL 30 DAY) OR `Users`.`Last_
   $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
  $stmt->bindParam(':uid', $_SESSION['User']);
         $stmt->execute();
-     /*   $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        var_dump($row); */
+     
         $returnString = "";
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
           
