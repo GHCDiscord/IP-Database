@@ -17,7 +17,8 @@ if(isset($_POST["discorduser"])){
 
 if($error == false){
 	if($user->findUserWithDiscord($discord)){
-		$user->ExpireDate($user->findUserWithDiscord($discord));
+		$expdate = date('Y-m-d', strtotime("-300 days"));
+		$user->setExpireDate($user->findUserWithDiscord($discord), $expdate);
 		echo "success";
 	} else {
 		echo "user not found";
