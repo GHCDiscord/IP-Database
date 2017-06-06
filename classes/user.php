@@ -242,13 +242,7 @@ class USER
         return $success;
     }
     
-    public function setExpireDate($id){
-        $expdate = date('Y-m-d', strtotime("-300 days"));
-        $stmt = $this->db->prepare("UPDATE `Users` SET `ExpireDate`=:expdate WHERE `ID`=:id");
-        $success = $stmt->execute(array(":id"=>$id, ":expdate"=>$expdate));
-
-        return $success;
-    }
+    
 
     public function returnExpireDate(){
         $expdate = date('Y-m-d', strtotime("+30 days"));
