@@ -42,6 +42,10 @@ if(isset($_POST["edituser"])){
 include "templates/header.php";
 include "templates/navbar.php";
 ?>
+<script>
+    document.getElementById('navIPs').classList.add("active");
+</script>
+
 <div class="container">
     <?php
     if(isset($success)){
@@ -94,7 +98,7 @@ include "templates/navbar.php";
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" name="deleteuser" value="Delete" class="btn btn-danger">Delete</button>
-                <button type="submit" name="edituser" class="btn btn-success">Update</button>
+                <button type="submit" name="edituser" class="btn btn-success" autofocus>Update</button>
             </div>
         </div>
     </form>
