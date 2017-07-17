@@ -79,8 +79,8 @@ include "templates/navbar.php";
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button type="submit" name="edituser" class="btn btn-success" autofocus>Update</button>
-                <button type="submit" name="refreshuser" class="btn btn-info">Reaktivieren</button>
-                <button type="submit" name="deleteuser" value="Delete" class="btn btn-danger">Delete</button>
+                <button type="button" name="refreshuser" class="btn btn-info">Reaktivieren</button>
+                <button type="button" name="deleteuser" value="Delete" class="btn btn-danger">Delete</button>
             </div>
         </div>
     </form>
