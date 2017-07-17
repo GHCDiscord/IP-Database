@@ -97,8 +97,8 @@ include "templates/navbar.php";
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" name="deleteuser" value="Delete" class="btn btn-danger">Delete</button>
                 <button type="submit" name="edituser" class="btn btn-success" autofocus>Update</button>
+                <button type="submit" name="deleteuser" value="Delete" class="btn btn-danger">Delete</button>
             </div>
         </div>
     </form>
