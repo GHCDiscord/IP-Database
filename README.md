@@ -1,9 +1,11 @@
+# Projekt eingestellt
+Dieses Projekt wurde eingestellt und neu entworfen. Es ist unter https://github.com/GHCDiscord/ghcdatabaseo zu finden.
+Nach wie vor sind interessierte Coder und Tipps solcher gerne bei uns willkommen.
+https://discord.gg/BW9fuPw
 
 
 # IP-Database
-PervSealy Site
-
-This is the website for the GHC-Community on Discord (https://discord.gg/3bQ5hE5)
+This is the website for the GHC-Community on Discord
 
 # Setup
 The website requires an MYSQL-Database to work.
